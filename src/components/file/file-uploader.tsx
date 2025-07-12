@@ -1,8 +1,7 @@
 
 import React, { useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { toast } from "@/hooks/use-toast";
-import { uploadFile } from "@/app/file/fetch-data/upload-file";
+import { toast } from "sonner";
 
 export function FileUploader({ setFileChanged }: {
     setFileChanged: React.Dispatch<React.SetStateAction<boolean>>
@@ -17,20 +16,18 @@ export function FileUploader({ setFileChanged }: {
         event.preventDefault();
         const file = event.target.files?.[0];
         if (file) {
-            const result = await uploadFile(file);
-            if (result.status == 'success') {
-                toast({
-                    title: "UPLOAD FILE",
-                    description: "File upload successfully"
-                });
-                setFileChanged(true);
-            }
+            //const result = await uploadFile(file);
+            // if (result.status == 'success') {
+            //     toast("UPLOAD FILE", {
+            //         description: "File upload successfully"
+            //     });
+            //     setFileChanged(true);
+            // }
 
-            else
-                toast({
-                    title: "UPLOAD FILE",
-                    description: "File upload failed"
-                });
+            // else
+            //     toast("UPLOAD FILE",{
+            //         description: "File upload failed"
+            //     });
         }
     };
 

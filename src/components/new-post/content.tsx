@@ -20,6 +20,15 @@ export default function NewPostContent() {
         </Label>
         <Input
             id='title'
+            required
+            className="text-xl block w-full px-3 py-2 rounded-md shadow-sm"
+        />
+       <Label htmlFor='slug' className="block text-xl font-semibold text-gray-700 mb-1">
+            Đường dẫn
+        </Label>
+        <Input
+            id='slug'
+            required
             className="text-xl block w-full px-3 py-2 rounded-md shadow-sm"
         />
         <Label htmlFor='content' className="block text-xl font-semibold text-gray-700 mb-1">

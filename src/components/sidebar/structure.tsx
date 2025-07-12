@@ -7,7 +7,7 @@ export const SidebarStructure = [
         icon: BookOpenText,
         items: [
             {
-                title: "Tạo bài viết mới",
+                title: "Tạo Tour mới",
                 url: "/tour/new",
             }
         ],
@@ -19,7 +19,18 @@ export const SidebarStructure = [
         items: [
             {
                 title: "Tạo khách sạn mới",
-                url: "#",
+                url: "/hotel/new",
+            }
+        ],
+    },
+     {
+        title: "Tin tức",
+        url: "/news",
+        icon: ListTree,
+        items: [
+            {
+                title: "Tạo bài viết mới",
+                url: "/news/new",
             }
         ],
     },

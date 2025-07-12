@@ -17,13 +17,9 @@ export const getArticleColumns = ({ onDelete }: { onDelete: (idRow: string) => v
         accessorKey: "title",
         header: ({ column }) => <ColumnHeader column={column} title="Tiêu đề" />
         ,
-        cell: ({ row }) => <div className=" font-medium">{row.getValue("title")} </div>
+        cell: ({ row }) => <div className=" font-medium truncate">{row.getValue("title")} </div>
     },
-    {
-        accessorKey: "category",
-        header: ({ column }) => <ColumnHeader column={column} title="Danh mục" />,
-        cell: ({ row }) => <div className="font-medium">{row.getValue("category")}</div>
-    },
+
     {
         accessorKey: "createDate",
         header: ({ column }) => <ColumnHeader column={column} title="Ngày tạo" />,

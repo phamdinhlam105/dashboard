@@ -6,6 +6,16 @@ import { Button } from "@/components/ui/button";
 
 export default function NewPostPage() {
 
+    const Post = {
+        title: "Bài viết mới",
+        slug:"bai-viet-moi",
+        content: "Nội dung bài viết mới sẽ được hiển thị ở đây.",
+        author: "Nguyễn Văn A",
+        date: "01/01/2023",
+        status:"draft",
+
+    }
+
     return <>
         <Header title="Tin tức mới" />
         <div className="p-4 w-full dark:bg-black h-full space-y-4">
