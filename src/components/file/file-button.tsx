@@ -3,12 +3,12 @@ import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import React, { useState } from "react";
 import { FileUploader } from "./file-uploader";
-import { IFileProps } from "./model/file-model";
+import { FileModel } from "./model/file-model";
 
 export default function FileButton({ handleSearch, removeSelected, selectedFiles, setFileChanged }: {
     handleSearch: (search: string) => void,
     removeSelected: () => void,
-    selectedFiles: IFileProps[],
+    selectedFiles: FileModel[],
     setFileChanged: React.Dispatch<React.SetStateAction<boolean>>
 }) {
 

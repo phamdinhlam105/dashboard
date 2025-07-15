@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   ColumnDef,
@@ -11,10 +11,10 @@ import {
   useReactTable,
   ColumnFiltersState,
   getFilteredRowModel,
-  VisibilityState
-
-} from "@tanstack/react-table"
-import * as React from "react"
+  VisibilityState,
+  RowSelectionState,
+} from "@tanstack/react-table";
+import * as React from "react";
 import {
   Table,
   TableBody,
@@ -22,30 +22,40 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import Pagination from "@/components/table/pagination"
+} from "@/components/ui/table";
+import Pagination from "@/components/table/pagination";
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
-  onDelete: (idRow: string) => void
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
+  onDelete: (idRow: string) => void;
+  onSelectionChange: (ids: string[]) => void;
 }
 
 export function DataTable<TData extends { id: string }, TValue>({
   columns,
   data,
   onDelete,
+  onSelectionChange,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
   });
-  const [rowSelection, setRowSelection] = React.useState({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
+  React.useEffect(() => {
+    const selectedIds = table
+      .getSelectedRowModel()
+      .rows.map((row) => row.id as string);
+    onSelectionChange?.(selectedIds);
+  }, [rowSelection]);
+
   const table = useReactTable({
     data,
     columns,
@@ -62,11 +72,11 @@ export function DataTable<TData extends { id: string }, TValue>({
       pagination,
       rowSelection,
       columnFilters,
-      columnVisibility
+      columnVisibility,
     },
     onPaginationChange: setPagination,
   });
-  
+
   return (
     <div className="rounded-md border w-full p-4 shadow-md bg-background">
       <Table className="text-md border rounded-md">
@@ -79,11 +89,11 @@ export function DataTable<TData extends { id: string }, TValue>({
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                   </TableHead>
-                )
+                );
               })}
             </TableRow>
           ))}
@@ -112,7 +122,11 @@ export function DataTable<TData extends { id: string }, TValue>({
           )}
         </TableBody>
       </Table>
-      <Pagination table={table} pagination={pagination} setPagination={setPagination} />
-    </div >
-  )
+      <Pagination
+        table={table}
+        pagination={pagination}
+        setPagination={setPagination}
+      />
+    </div>
+  );
 }

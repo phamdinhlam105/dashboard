@@ -1,7 +1,6 @@
-export interface IFileProps {
-    name: any;
-    id(id: any): Promise<any>;
-    fileName: string,
-    filePath: string,
-    size: number
+export type FileModel = {
+    id:string,
+    name:string,
+    createdAt:string,
+    url:string
 }

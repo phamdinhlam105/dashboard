@@ -1,4 +1,4 @@
-import { IFileProps } from "@/components/file/model/file-model";
+import { FileModel } from "@/components/file/model/file-model";
 
 const API_URL = "http://localhost:3000/image";
 

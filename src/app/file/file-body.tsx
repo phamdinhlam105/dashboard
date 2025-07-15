@@ -2,14 +2,15 @@
 
 import FileButton from "@/components/file/file-button"
 import FileList from "@/components/file/file-list"
-import { IFileProps } from "@/components/file/model/file-model";
+import { FILE_MOCK_DATA } from "@/components/file/mock-data/file-data";
+import { FileModel } from "@/components/file/model/file-model";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function FileBody() {
 
-    const [files, setFiles] = useState<IFileProps[]>([]);
-    const [selectedFiles, setSelectedFiles] = useState<IFileProps[]>([]);
+    const [files, setFiles] = useState<FileModel[]>(FILE_MOCK_DATA);
+    const [selectedFiles, setSelectedFiles] = useState<FileModel[]>([]);
     const [fileChanged, setFileChanged] = useState(true);
 
     useEffect(() => {
@@ -17,6 +18,7 @@ export default function FileBody() {
             try {
                 //const result = await getImages();
                 //lsetFiles(result);
+                setFiles(FILE_MOCK_DATA)
             } catch (error) {
                 console.error("Error fetching data:", error);
             }

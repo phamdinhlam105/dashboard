@@ -1,7 +1,5 @@
 "use client"
-import { ARTICLE_LIST } from "@/components/article/constants/article.constants";
 import { DataTable } from "@/components/table/data-table";
-import { getArticleColumns } from "@/components/article/column-def/columns";
 import { useState } from "react";
 import ActionsNavigation from "@/components/table/actions-navigation";
 import { TourModel } from "@/components/tour/model/tour-model";
@@ -12,6 +10,7 @@ import { getTourColumns } from "@/components/tour/tour-detail/column-def";
 export default function TourList() {
     const [data, setData] = useState(TOUR_MOCK_DATA);
     const [filteredData, setFilteredData] = useState<TourModel[]>(TOUR_MOCK_DATA);
+    const [selectedIds,setSelectedIds] = useState<string[]>([])
     const onDelete = (id: string) => {
         setData((prev) => prev.map((item) => item.id === id ? { ...item, status: 'deleted' } : item));
     }
@@ -30,6 +29,9 @@ export default function TourList() {
         else if(lowerSearch === 'unavailable')
             setFilteredData(data.filter(item => !item.isAvailable));
     }
+    const onSelectionChange = (ids:string[])=>{
+        setSelectedIds(ids);
+    }
 
     const columns = getTourColumns({ onDelete });
     return (
@@ -43,7 +45,8 @@ export default function TourList() {
             />
             <DataTable columns={columns}
                 data={filteredData}
-                onDelete={onDelete} />
+                onDelete={onDelete} 
+                onSelectionChange={onSelectionChange}/>
         </div>
     )
 }
