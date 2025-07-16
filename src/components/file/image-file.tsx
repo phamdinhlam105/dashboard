@@ -10,7 +10,7 @@ export default function ImageFile({
   handleCheckChange: (file: FileModel, isCheck: boolean) => void;
 }) {
   return (
-    <div className="w-full rounded-lg shadow-sm ">
+    <div className="w-full rounded-lg shadow-sm">
       <div
         className="relative w-full aspect-[3/2]"
       >
@@ -25,11 +25,12 @@ export default function ImageFile({
           }}
         ></Checkbox>
       </div>
-      <div className="bg-accent w-full rounded-b-md p-2 space-y-2">
+      <div className="bg-accent w-full rounded-b-md p-2 space-y-2 px-2">
         <p className="text-sm">
           <span className="font-bold">Tên ảnh: </span>
           {file.name}
         </p>
+        <p className="break-all text-xs">{file.url}</p>
       </div>
     </div>
   );

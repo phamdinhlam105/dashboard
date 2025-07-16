@@ -6,12 +6,27 @@ import { useEffect, useState } from "react";
 import RoomDetail from "./room-detail";
 import { Button } from "@/components/ui/button";
 import { RefreshCcwIcon } from "lucide-react";
+import { FILE_MOCK_DATA } from "@/components/file/mock-data/file-data";
+import { FileModel } from "@/components/file/model/file-model";
+import ChooseFile from "@/components/file/choose-file/choose-file";
+import FileList from "@/components/file/file-list";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import Image from "next/image";
 
 export default function NewHotelAdditionalDetail({
   description,
   address,
   ultilities,
   price,
+  thumbnail,
+  images,
   roomDetails,
   onChange,
 }: {
@@ -19,6 +34,8 @@ export default function NewHotelAdditionalDetail({
   address: string;
   price: string;
   ultilities: string;
+  thumbnail: string;
+  images: string[];
   roomDetails: {
     id: string;
     name: string;
@@ -26,7 +43,7 @@ export default function NewHotelAdditionalDetail({
     included: string;
     price: string;
   }[];
-  onChange: (field: string, value: string) => void;
+  onChange: (field: string, value: string | string[]) => void;
 }) {
   const [roomNumber, setRoomNumber] = useState(roomDetails.length || 0);
   const [draftRooms, setDraftRooms] = useState(roomDetails);
@@ -46,7 +63,7 @@ export default function NewHotelAdditionalDetail({
         });
       }
     } else if (roomNumber < currentCount) {
-      updated.splice(roomNumber); // cắt bớt
+      updated.splice(roomNumber);
     }
 
     setDraftRooms(updated);
@@ -56,6 +73,12 @@ export default function NewHotelAdditionalDetail({
     setDraftRooms(roomDetails);
     setRoomNumber(roomDetails.length);
   };
+
+  const [gallery, setGallery] = useState<FileModel[]>(
+    FILE_MOCK_DATA.filter((i) => images.includes(i.url))
+  );
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpenGallery, setIsOpenGallery] = useState<boolean>(false);
 
   return (
     <div className="border rounded-md shadow-sm w-1/3 p-4 bg-background space-y-4">
@@ -99,6 +122,69 @@ export default function NewHotelAdditionalDetail({
           value={price}
           onChange={(e) => onChange("price", e.target.value)}
         />
+      </div>
+      <div>
+        <Label className="block text-md font-semibold">Thumbnail</Label>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+          <DialogTrigger className="border-1 rounded-lg p-2 hover:bg-gray-200">
+            Chọn hình ảnh
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Chọn một ảnh cho thumbnail</DialogTitle>
+            </DialogHeader>
+            <div>
+              <ChooseFile onChange={onChange} setIsOpen={setIsOpen} />
+            </div>
+          </DialogContent>
+        </Dialog>
+        <div className="relative w-full aspect-3/2 rounded-lg shadow-md p-2">
+          {thumbnail ? (
+            <Image alt="thumbnail" src={thumbnail} fill />
+          ) : (
+            <p className="text-gray-400">Chưa có ảnh</p>
+          )}
+        </div>
+      </div>
+      <div className="space-y-2">
+        <Label className="block text-md font-semibold">Gallery</Label>
+        <Dialog open={isOpenGallery} onOpenChange={setIsOpenGallery}>
+          <DialogTrigger>Chọn hình ảnh</DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+               <DialogHeader>
+              <DialogTitle>Chọn các ảnh để đưa vào gallery bài viết</DialogTitle>
+            </DialogHeader>
+            </DialogHeader>
+            <FileList
+              files={FILE_MOCK_DATA}
+              selectedFiles={gallery}
+              setSelectedFiles={setGallery}
+            />
+            <Button
+              onClick={() => {
+                onChange(
+                  "images",
+                  gallery.map((g) => g.url)
+                );
+                setIsOpenGallery(false);
+              }}
+            >
+              Chọn các ảnh trên
+            </Button>
+          </DialogContent>
+        </Dialog>
+        {images && images.length > 0 ? (
+          <div className="grid grid-cols-2 gap-2 rounded-md shadow-md p-2">
+            {images.map((i, idx) => (
+              <div key={idx} className="relative aspect-1/1 w-full">
+                <Image fill alt="thumbnail" src={i} />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-gray-400">Chưa có ảnh</p>
+        )}
       </div>
       <div className="flex items-center justify-between">
         <Label className="block text-md font-semibold">Số phòng</Label>

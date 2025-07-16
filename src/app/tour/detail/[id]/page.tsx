@@ -10,8 +10,10 @@ import { useState } from "react";
 export default function TourDetailPage() {
   const params = useParams();
   const id = params.id as string;
-  const [currentTour, setCurrentTour] = useState(TOUR_MOCK_DATA.findLast(tour => tour.id === id)|| TOUR_MOCK_DATA[0]);
-  const onChange = (field: string, value: string) => {
+  const [currentTour, setCurrentTour] = useState(
+    TOUR_MOCK_DATA.findLast((tour) => tour.id === id) || TOUR_MOCK_DATA[0]
+  );
+  const onChange = (field: string, value: string | string[]) => {
     setCurrentTour((prev) => ({ ...prev, [field]: value }));
   };
   const onTourDetailChange = (field: string, value: string) => {
@@ -23,7 +25,9 @@ export default function TourDetailPage() {
       },
     }));
   };
-
+  const saveChange = () => {
+    //api call
+  };
   return (
     <>
       <Header title="Chi tiết tour" />
@@ -36,6 +40,8 @@ export default function TourDetailPage() {
           onChange={onChange}
         />
         <NewTourAdditionalDetail
+          thumbnail={currentTour.thumbnail}
+          images={currentTour.images}
           description={currentTour.description}
           startingPlace={currentTour.startingPlace}
           price={currentTour.price}

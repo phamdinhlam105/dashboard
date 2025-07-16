@@ -1,64 +1,70 @@
-"use client"
+"use client";
 
-import FileButton from "@/components/file/file-button"
-import FileList from "@/components/file/file-list"
+import FileButton from "@/components/file/file-button";
+import FileList from "@/components/file/file-list";
 import { FILE_MOCK_DATA } from "@/components/file/mock-data/file-data";
 import { FileModel } from "@/components/file/model/file-model";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function FileBody() {
+  const [files, setFiles] = useState<FileModel[]>(FILE_MOCK_DATA);
+  const [selectedFiles, setSelectedFiles] = useState<FileModel[]>([]);
+  const [fileChanged, setFileChanged] = useState(true);
 
-    const [files, setFiles] = useState<FileModel[]>(FILE_MOCK_DATA);
-    const [selectedFiles, setSelectedFiles] = useState<FileModel[]>([]);
-    const [fileChanged, setFileChanged] = useState(true);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                //const result = await getImages();
-                //lsetFiles(result);
-                setFiles(FILE_MOCK_DATA)
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        };
-        if (fileChanged === true) {
-            //fetchData();
-            setFileChanged(false);
-        }
-    }, [fileChanged]);
-    const handleSearch = (search: string) => {
-        if (search)
-            setFiles(files.filter(file => file.name.toLowerCase().includes(search.toLowerCase())));
-        else
-            setFileChanged(true);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        //const result = await getImages();
+        //lsetFiles(result);
+        setFiles(FILE_MOCK_DATA);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    if (fileChanged === true) {
+      //fetchData();
+      setFileChanged(false);
     }
+  }, [fileChanged]);
+  const handleSearch = (search: string) => {
+    if (search == "") setFiles(FILE_MOCK_DATA);
+    if (search)
+      setFiles(
+        files.filter((file) =>
+          file.name.toLowerCase().includes(search.toLowerCase())
+        )
+      );
+    else setFileChanged(true);
+  };
 
-    const removeSelected = async () => {
-        if (selectedFiles.length > 0) {
-            setFiles((prevData) =>
-                prevData.filter((item) => !selectedFiles.includes(item))
-            );
-            //selectedFiles.map(f => deleteImage(f.id));
-            toast("DELETE CATEGORY",{
-                description: "All selected images are deleted"
-            })
-        }
+  const removeSelected = async () => {
+    if (selectedFiles.length > 0) {
+      setFiles((prevData) =>
+        prevData.filter((item) => !selectedFiles.includes(item))
+      );
+      //selectedFiles.map(f => deleteImage(f.id));
+      toast("DELETE CATEGORY", {
+        description: "All selected images are deleted",
+      });
     }
+  };
 
-    return (
-        <div className="p-3 w-full dark:bg-black h-full">
-            <div className="p-3 bg-background rounded-md shadow-sm border">
-                <FileButton
-                    handleSearch={handleSearch}
-                    removeSelected={removeSelected}
-                    selectedFiles={selectedFiles}
-                    setFileChanged={setFileChanged} />
-                <FileList files={files}
-                    selectedFiles={selectedFiles}
-                    setSelectedFiles={setSelectedFiles} />
-            </div>
-        </div>
-    )
+  return (
+    <div className="p-3 w-full dark:bg-black h-full">
+      <div className="p-3 bg-background rounded-md shadow-sm border">
+        <FileButton
+          handleSearch={handleSearch}
+          removeSelected={removeSelected}
+          selectedFiles={selectedFiles}
+          setFileChanged={setFileChanged}
+        />
+        <FileList
+          files={files}
+          selectedFiles={selectedFiles}
+          setSelectedFiles={setSelectedFiles}
+        />
+      </div>
+    </div>
+  );
 }
