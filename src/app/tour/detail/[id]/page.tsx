@@ -1,11 +1,13 @@
 "use client";
+import { getTourById, TourRequest, updateTour } from "@/components/api/tour-api";
 import Header from "@/components/header/header";
 import { TOUR_MOCK_DATA } from "@/components/tour/mock-data/tour-data";
 import NewTourAdditionalDetail from "@/components/tour/new-tour/tour-additional-detail";
 import NewTourContent from "@/components/tour/new-tour/tour-content";
 import { Button } from "@/components/ui/button";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function TourDetailPage() {
   const params = useParams();
@@ -13,6 +15,16 @@ export default function TourDetailPage() {
   const [currentTour, setCurrentTour] = useState(
     TOUR_MOCK_DATA.findLast((tour) => tour.id === id) || TOUR_MOCK_DATA[0]
   );
+
+  useEffect(() => {
+    const fetchTours = async () => {
+      const tours = await getTourById(id);
+      if (tours) setCurrentTour(tours);
+    };
+
+    fetchTours();
+  }, []);
+  
   const onChange = (field: string, value: string | string[]) => {
     setCurrentTour((prev) => ({ ...prev, [field]: value }));
   };
@@ -25,8 +37,28 @@ export default function TourDetailPage() {
       },
     }));
   };
-  const saveChange = () => {
-    //api call
+  const saveChange = async () => {
+    const {
+      location,
+      food,
+      suitablePerson,
+      idealTime,
+      transportation,
+      promotion,
+    } = currentTour.tourDetail;
+
+    const request: TourRequest = {
+      ...currentTour,
+      location,
+      food,
+      suitablePerson,
+      idealTime,
+      transportation,
+      promotion,
+    };
+    const res = await updateTour(request);
+    if (res) toast.success("Cập nhật tour thành công");
+    else toast.error("Cập nhật thất bại");
   };
   return (
     <>
@@ -50,7 +82,7 @@ export default function TourDetailPage() {
           tourDetailOnChange={onTourDetailChange}
         />
       </div>
-      <Button variant="default" className="w-1/4 h-10 m-4">
+      <Button variant="default" className="w-1/4 h-10 m-4" onClick={saveChange}>
         Lưu thay đổi
       </Button>
     </>

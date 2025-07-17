@@ -1,9 +1,12 @@
 "use client";
+import { addNewHotel, HotelRequest } from "@/components/api/hotel-api";
 import Header from "@/components/header/header";
 import { HotelModel } from "@/components/hotel/model/hotel-model";
 import NewHotelAdditionalDetail from "@/components/hotel/new/hotel-additional-detail";
 import NewHotelContent from "@/components/hotel/new/hotel-content";
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function NewHotelPage() {
   const [newHotel, setNewHotel] = useState<HotelModel>({
@@ -14,6 +17,7 @@ export default function NewHotelPage() {
     star: 4,
     createdAt: "",
     updatedAt: "",
+    isAvailable:true,
     description: "",
     content: "",
     price: "",
@@ -27,6 +31,17 @@ export default function NewHotelPage() {
 
   const onChange = (field: string, value: string | string[]) => {
     setNewHotel((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const saveChange = async () => {
+    const request:HotelRequest={
+      ...newHotel,
+    }
+    const res = await addNewHotel(request);
+    if(res)
+      toast.success("Thêm khách sạn thành công")
+    else
+      toast.error("Thêm khách sạn thất bại")
   };
 
   return (
@@ -52,6 +67,9 @@ export default function NewHotelPage() {
           onChange={onChange}
         />
       </div>
+      <Button variant="default" className="w-1/4 h-10 m-4" onClick={saveChange}>
+        Lưu thay đổi
+      </Button>
     </>
   );
 }

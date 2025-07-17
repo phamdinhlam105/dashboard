@@ -1,9 +1,11 @@
 "use client";
+import { addNewTour, TourRequest } from "@/components/api/tour-api";
 import Header from "@/components/header/header";
 import NewTourAdditionalDetail from "@/components/tour/new-tour/tour-additional-detail";
 import NewTourContent from "@/components/tour/new-tour/tour-content";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export default function NewTourPage() {
   const [currentTour, setCurrentTour] = useState({
@@ -15,6 +17,7 @@ export default function NewTourPage() {
     startingPlace: "",
     price: "",
     thumbnail: "",
+    isAvailable:true,
     images: [],
     tourDetail: {
       location: "",
@@ -38,7 +41,29 @@ export default function NewTourPage() {
     }));
   };
 
-  const saveChange = () => {};
+  const saveChange = async () => {
+    const {
+      location,
+      food,
+      suitablePerson,
+      idealTime,
+      transportation,
+      promotion,
+    } = currentTour.tourDetail;
+
+    const request: TourRequest = {
+      ...currentTour,
+      location,
+      food,
+      suitablePerson,
+      idealTime,
+      transportation,
+      promotion,
+    };
+    const res = await addNewTour(request);
+    if (res) toast.success("Tạo tour mới thành công");
+    else toast.error("Tạo mới không thành công");
+  };
 
   return (
     <div>
@@ -62,7 +87,7 @@ export default function NewTourPage() {
           tourDetailOnChange={onTourDetailChange}
         />
       </div>
-      <Button variant="default" className="w-1/4 h-10 m-4">
+      <Button variant="default" className="w-1/4 h-10 m-4" onClick={saveChange}>
         Lưu thay đổi
       </Button>
     </div>

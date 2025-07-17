@@ -12,6 +12,7 @@ export type HotelModel={
     rule:string;
     content:string;
     images: string[];
+    isAvailable:boolean;
     thumbnail: string;
     createdAt: string;
     updatedAt: string;

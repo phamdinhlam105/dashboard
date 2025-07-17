@@ -23,16 +23,16 @@ export default function ActionsNavigation({
   searchTitle: (search: string) => void;
   onDelete: (idRow: string) => void;
   allStatus: string[];
-  searchStatus: (selectedStatus: string) => void;
+  searchStatus: (selectedStatus: number) => void;
   newItemLink: string;
 }) {
   const [search, setSearch] = React.useState("");
-  const [statusSearch, setStatusSearch] = React.useState("");
+  const [statusSearch, setStatusSearch] = React.useState(0);
 
   useEffect(() => searchTitle(search), [search]);
   useEffect(() => searchStatus(statusSearch), [statusSearch]);
   const removeFilter = () => {
-    setStatusSearch("");
+    setStatusSearch(0);
     setSearch("");
   };
   return (
@@ -56,11 +56,11 @@ export default function ActionsNavigation({
               <span>Trạng thái</span>
             </DropdownMenuSubTrigger>
             <DropdownMenuSubContent className="bg-background shadow-md rounded-md p-1">
-              {allStatus.map((item) => (
+              {allStatus.map((item,idx) => (
                 <Button
                   variant="ghost"
                   key={item}
-                  onClick={(e) => setStatusSearch(item)}
+                  onClick={(e) => setStatusSearch(idx)}
                 >
                   {item}
                 </Button>

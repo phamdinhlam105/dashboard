@@ -1,4 +1,4 @@
-const API_URL = `${process.env.API_LINK}image/`;
+const API_URL = `${process.env.NEXT_PUBLIC_API_LINK}image/`;
 
 type ImageRequest = {
   id: string;
@@ -63,7 +63,7 @@ export const addNewImage = async (formData: FormData) => {
   }
 };
 
-export const UpdateImage = async (request: ImageRequest) => {
+export const updateImage = async (request: ImageRequest) => {
   try {
     const response = await fetch(`${API_URL}`, {
       method: "PUT",
@@ -84,7 +84,7 @@ export const UpdateImage = async (request: ImageRequest) => {
   }
 };
 
-export const DeleteImage = async (id: string) => {
+export const deleteImage = async (id: string) => {
   try {
     const response = await fetch(`${API_URL}/${id}`, {
       method: "DELETE",

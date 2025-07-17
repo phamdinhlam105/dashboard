@@ -9,6 +9,7 @@ export const HOTEL_MOCK_DATA: HotelModel[] = [
     star: 4,
     createdAt: "2023-01-01",
     updatedAt: "2023-01-01",
+    isAvailable:true,
     description:
       "Queen Ann Nha Trang Hotel - Đối tác Đan Phát Travel dịch vụ lưu trú hàng đầu tại Thành phố Biển Nha Trang",
     content: `<h2 style="color:#0E5AA4; font-weight:bold;">Khách sạn Queen Ann Nha Trang</h2>
@@ -116,6 +117,7 @@ export const HOTEL_MOCK_DATA: HotelModel[] = [
     slug: "joy-trip-hotel",
     type: "Khách sạn",
     star: 4,
+    isAvailable:true,
     createdAt: "2023-01-01",
     updatedAt: "2023-01-01",
     description:
@@ -231,6 +233,7 @@ export const HOTEL_MOCK_DATA: HotelModel[] = [
     star: 5,
     createdAt: "2023-01-01",
     updatedAt: "2023-01-01",
+    isAvailable:true,
     description:
       "Premier Havana Nha Trang – khách sạn 5 sao cao nhất Việt Nam, 41 tầng, view biển, đường hầm ra biển độc đáo.",
     content: `<h2 style="color:#0E5AA4; font-weight:bold;">Premier Havana Nha Trang Hotel</h2>
@@ -339,6 +342,7 @@ export const HOTEL_MOCK_DATA: HotelModel[] = [
     type: "Khách sạn",
     star: 5,
     createdAt: "2023-01-01",
+    isAvailable:true,
     updatedAt: "2023-01-01",
     description:
       "Diamond Bay Hotel – khách sạn 5 sao bên bãi biển với 2 hồ bơi ngoài trời, spa, gym và tiện nghi hội nghị hiện đại.",

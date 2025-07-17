@@ -1,13 +1,13 @@
-import { AvailableStatus } from "./enum";
 
-const API_URL = `${process.env.API_LINK}hotel/`;
+
+const API_URL = `${process.env.NEXT_PUBLIC_API_LINK}hotel/`;
 
 export interface RoomDetailRequest {
   id?: string;             // Guid? => string | undefined
   name: string;
   capacity: string;
   included: string;
-  price: number;
+  price: string;
 }
 
 export interface HotelRequest {
@@ -17,9 +17,9 @@ export interface HotelRequest {
   address: string;
   thumbnail: string;
   description: string;
-  price: number;
+  price: string;
   content: string;
-  status: AvailableStatus;
+  isAvailable: boolean;
   promotionPrice?: number;
   images: string[];
   star: number;
@@ -89,7 +89,7 @@ export const addNewHotel = async (request: HotelRequest) => {
   }
 };
 
-export const UpdateHotel = async (request: HotelRequest) => {
+export const updateHotel = async (request: HotelRequest) => {
   try {
     const response = await fetch(`${API_URL}`, {
       method: "PUT",

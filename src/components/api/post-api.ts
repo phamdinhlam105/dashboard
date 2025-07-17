@@ -1,6 +1,6 @@
 import { PostStatus } from "./enum";
 
-const API_URL = `${process.env.API_LINK}post/`;
+const API_URL = `${process.env.NEXT_PUBLIC_API_LINK}post/`;
 
 export interface PostRequest {
   id?: string; // Guid? => string | undefined
@@ -73,7 +73,7 @@ export const addNewPost = async (request: PostRequest) => {
   }
 };
 
-export const UpdatePost = async (request: PostRequest) => {
+export const updatePost = async (request: PostRequest) => {
   try {
     const response = await fetch(`${API_URL}`, {
       method: "PUT",
@@ -94,7 +94,7 @@ export const UpdatePost = async (request: PostRequest) => {
   }
 };
 
-export const DeletePost = async (id: string) => {
+export const deletePost = async (id: string) => {
   try {
     const response = await fetch(`${API_URL}/${id}`, {
       method: "DELETE",

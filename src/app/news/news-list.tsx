@@ -5,17 +5,14 @@ import { getArticleColumns } from "@/components/article/column-def/columns";
 import { useState } from "react";
 import ActionsNavigation from "@/components/table/actions-navigation";
 import { Article } from "@/components/article/model/article-model";
+import { PostStatus } from "@/components/api/enum";
 
 export default function NewsList() {
   const [data, setData] = useState(ARTICLE_LIST);
   const [filteredData, setFilteredData] = useState<Article[]>(ARTICLE_LIST);
-  const onDelete = (id: string) => {
-    setData((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, status: "deleted" } : item
-      )
-    );
-  };
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+
+  const onDelete = (id: string) => {};
 
   const searchTitle = (search: string) => {
     const lowerSearch = search.toLowerCase();
@@ -24,11 +21,12 @@ export default function NewsList() {
     );
   };
 
-  const statusFilter = (selectedStatus: string) => {
-    const lowerSearch = selectedStatus.toLowerCase();
-    setFilteredData(
-      data.filter((item) => item.status.toLowerCase().includes(lowerSearch))
-    );
+  const statusFilter = (selectedStatus: number) => {
+    
+    setFilteredData(data.filter((item) => item.status == selectedStatus));
+  };
+  const onRowSelectionChange = (ids: string[]) => {
+    setSelectedIds(ids);
   };
 
   const columns = getArticleColumns({ onDelete });
@@ -37,11 +35,16 @@ export default function NewsList() {
       <ActionsNavigation
         searchTitle={searchTitle}
         onDelete={onDelete}
-        allStatus={["deleted", "published", "draft"]}
+        allStatus={["Bản thảo","Đã xuất bản","Đã xoá"]}
         searchStatus={statusFilter}
         newItemLink="/news/new"
       />
-      <DataTable columns={columns} data={filteredData} onDelete={onDelete} />
+      <DataTable
+        columns={columns}
+        data={filteredData}
+        onDelete={onDelete}
+        onSelectionChange={onRowSelectionChange}
+      />
     </div>
   );
 }
