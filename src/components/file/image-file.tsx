@@ -7,21 +7,19 @@ export default function ImageFile({
   handleCheckChange,
 }: {
   file: FileModel;
-  handleCheckChange: (file: FileModel, isCheck: boolean) => void;
+  handleCheckChange: (id:string, isCheck: boolean) => void;
 }) {
   return (
     <div className="w-full rounded-lg shadow-sm">
-      <div
-        className="relative w-full aspect-[3/2]"
-      >
-        <Image className="" alt={file.name} src={file.url} fill/>
+      <div className="relative w-full aspect-[3/2]">
+        <Image className="" alt={file.name} src={file.url} fill unoptimized />
         <Checkbox
           aria-checked="false"
           value="on"
           className=" h-5 w-5 absolute right-1 top-1 z-40 bg-white"
           onCheckedChange={(checked) => {
             const isChecked = checked === true;
-            handleCheckChange(file, isChecked);
+            handleCheckChange(file.id, isChecked);
           }}
         ></Checkbox>
       </div>

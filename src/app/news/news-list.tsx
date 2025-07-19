@@ -1,16 +1,31 @@
 "use client";
-import { ARTICLE_LIST } from "@/components/article/constants/article.constants";
 import { DataTable } from "@/components/table/data-table";
 import { getArticleColumns } from "@/components/article/column-def/columns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ActionsNavigation from "@/components/table/actions-navigation";
-import { Article } from "@/components/article/model/article-model";
-import { PostStatus } from "@/components/api/enum";
+import { PostItemList } from "@/components/article/model/article-model";
+import { getAllPost } from "@/components/api/post-api";
+import { toast } from "sonner";
 
 export default function NewsList() {
-  const [data, setData] = useState(ARTICLE_LIST);
-  const [filteredData, setFilteredData] = useState<Article[]>(ARTICLE_LIST);
+  const [data, setData] = useState<PostItemList[]>([]);
+  const [filteredData, setFilteredData] = useState<PostItemList[]>(data);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    const fecthPost = async () => {
+      const result = await getAllPost();
+      if (result) {
+        setData(result);
+        setIsLoading(false);
+      } else toast.error("Không thể tải dữ liệu");
+    };
+    fecthPost();
+  }, []);
+
+  useEffect(() => {
+    setFilteredData(data);
+  }, [data]);
 
   const onDelete = (id: string) => {};
 
@@ -22,7 +37,6 @@ export default function NewsList() {
   };
 
   const statusFilter = (selectedStatus: number) => {
-    
     setFilteredData(data.filter((item) => item.status == selectedStatus));
   };
   const onRowSelectionChange = (ids: string[]) => {
@@ -35,16 +49,20 @@ export default function NewsList() {
       <ActionsNavigation
         searchTitle={searchTitle}
         onDelete={onDelete}
-        allStatus={["Bản thảo","Đã xuất bản","Đã xoá"]}
+        allStatus={["Bản thảo", "Đã xuất bản", "Đã xoá"]}
         searchStatus={statusFilter}
         newItemLink="/news/new"
       />
-      <DataTable
-        columns={columns}
-        data={filteredData}
-        onDelete={onDelete}
-        onSelectionChange={onRowSelectionChange}
-      />
+      {isLoading ? (
+        "Đang tải dữ liệu"
+      ) : (
+        <DataTable
+          columns={columns}
+          data={filteredData}
+          onDelete={onDelete}
+          onSelectionChange={onRowSelectionChange}
+        />
+      )}
     </div>
   );
 }

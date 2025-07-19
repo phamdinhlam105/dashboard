@@ -1,4 +1,4 @@
-const API_URL = `${process.env.NEXT_PUBLIC_API_LINK}image/`;
+const API_URL = `${process.env.NEXT_PUBLIC_API_LINK}image`;
 
 type ImageRequest = {
   id: string;

@@ -3,30 +3,34 @@
 import { DataTable } from "@/components/table/data-table";
 import { useEffect, useState } from "react";
 import ActionsNavigation from "@/components/table/actions-navigation";
-import { HOTEL_MOCK_DATA } from "@/components/hotel/mock-data/hotel-data";
-import { HotelModel } from "@/components/hotel/model/hotel-model";
+import { HotelItemListModel } from "@/components/hotel/model/hotel-model";
 import { getHotelColumns } from "@/components/hotel/hotel-detail/column-def";
 import { getAllHotel } from "@/components/api/hotel-api";
+import { toast } from "sonner";
 
 export default function HotelList() {
-  const [data, setData] = useState(HOTEL_MOCK_DATA);
-  const [filteredData, setFilteredData] =
-    useState<HotelModel[]>(HOTEL_MOCK_DATA);
+  const [data, setData] = useState<HotelItemListModel[]>([]);
+  const [filteredData, setFilteredData] = useState<HotelItemListModel[]>(data);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     const fetchHotels = async () => {
-      const tours = await getAllHotel();
-      if (tours) setData(tours);
+      const hotels = await getAllHotel();
+      if (hotels) {
+        setData(hotels);
+        setIsLoading(false);
+      } else toast.error("Không thể tải dữ liệu");
     };
     fetchHotels();
   }, []);
 
+  useEffect(() => {
+    setFilteredData(data);
+  }, [data]);
+
   const onDelete = (id: string) => {
     setData((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, status: "deleted" } : item
-      )
+      prev.map((item) => (item.id === id ? { ...item, status: 0 } : item))
     );
   };
 
@@ -54,12 +58,16 @@ export default function HotelList() {
         searchStatus={starFilter}
         newItemLink="/hotel/new"
       />
-      <DataTable
-        columns={columns}
-        data={filteredData}
-        onDelete={onDelete}
-        onSelectionChange={onRowSelectionChange}
-      />
+      {!isLoading ? (
+        <DataTable
+          columns={columns}
+          data={filteredData}
+          onDelete={onDelete}
+          onSelectionChange={onRowSelectionChange}
+        />
+      ) : (
+        "Đang tải dữ liệu"
+      )}
     </div>
   );
 }

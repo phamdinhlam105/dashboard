@@ -17,7 +17,7 @@ export default function NewHotelPage() {
     star: 4,
     createdAt: "",
     updatedAt: "",
-    isAvailable:true,
+    status:1,
     description: "",
     content: "",
     price: "",

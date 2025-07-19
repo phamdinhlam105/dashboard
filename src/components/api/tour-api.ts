@@ -1,6 +1,4 @@
-
-
-const API_URL = `${process.env.NEXT_PUBLIC_API_LINK}tour/`;
+const API_URL = `${process.env.NEXT_PUBLIC_API_LINK}tour`;
 
 export interface TourRequest {
   id?: string; // Guid => string (optional)
@@ -13,7 +11,7 @@ export interface TourRequest {
   schedule: string;
   scheduleDetail: string;
   price?: string; // decimal? => number (optional)
-  isAvailable: boolean;
+  status: number;
 
   // Tour Detail
   location: string;
@@ -66,6 +64,7 @@ export const getTourById = async (id: string) => {
 
 export const addNewTour = async (request: TourRequest) => {
   try {
+    request.id = undefined;
     const response = await fetch(`${API_URL}`, {
       method: "POST",
       headers: {

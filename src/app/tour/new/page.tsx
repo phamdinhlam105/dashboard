@@ -17,7 +17,7 @@ export default function NewTourPage() {
     startingPlace: "",
     price: "",
     thumbnail: "",
-    isAvailable:true,
+    status:1,
     images: [],
     tourDetail: {
       location: "",

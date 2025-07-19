@@ -4,11 +4,12 @@ import ColumnHeader from "@/components/table/column-header"
 import ActionCell from "@/components/table/action-cell"
 import SelectHeader from "@/components/table/select-header"
 import SelectCell from "@/components/table/select-cell"
-import { HotelModel } from "../model/hotel-model"
+import { HotelItemListModel } from "../model/hotel-model"
 import Link from "next/link"
+import { formatDateTime } from "@/lib/datetime-format"
 
 
-export const getHotelColumns = ({ onDelete }: { onDelete: (idRow: string) => void }): ColumnDef<HotelModel>[] => [
+export const getHotelColumns = ({ onDelete }: { onDelete: (idRow: string) => void }): ColumnDef<HotelItemListModel>[] => [
     {
         id: "select",
         header: ({ table }) => <SelectHeader table={table} />,
@@ -23,7 +24,7 @@ export const getHotelColumns = ({ onDelete }: { onDelete: (idRow: string) => voi
     {
         accessorKey: "updatedAt",
         header: ({ column }) => <ColumnHeader column={column} title="Ngày cập nhật" />,
-        cell: ({ row }) => <div className="font-medium text-gray-400 w-20">{row.getValue("updatedAt")}</div>
+        cell: ({ row }) => <div className="font-medium text-gray-400 w-20">{formatDateTime(row.getValue("updatedAt"))}</div>
     },
     {
         accessorKey: "star",
@@ -40,7 +41,7 @@ export const getHotelColumns = ({ onDelete }: { onDelete: (idRow: string) => voi
     {
         accessorKey: "roomNumber",
         header: ({ column }) => <ColumnHeader column={column} title="Số phòng" />,
-        cell: ({ row }) => <div className="w-28 font-medium text-center">{row.original.roomDetails.length}</div>
+        cell: ({ row }) => <div className="w-28 font-medium text-center">{row.original.roomCount}</div>
     },
     {
         id: "actions",

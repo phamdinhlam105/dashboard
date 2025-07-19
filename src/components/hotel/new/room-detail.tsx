@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 type Room = {
-  id: string;
+  id?: string;
   name: string;
   capacity: string;
   included: string;
@@ -29,7 +29,6 @@ export default function RoomDetail({
   if (roomNumber > currentCount) {
     for (let i = currentCount; i < roomNumber; i++) {
       newRooms.push({
-        id: (i + 1).toString(), 
         name: "",
         capacity: "",
         included: "",
@@ -63,7 +62,7 @@ export default function RoomDetail({
             key={room.id}
             className="border border-gray-300 rounded-lg p-4 shadow-sm space-y-4"
           >
-            <h3 className="text-lg font-semibold">Phòng {room.id}</h3>
+            <h3 className="text-lg font-semibold">Phòng {index + 1}</h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>

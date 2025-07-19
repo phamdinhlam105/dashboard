@@ -12,7 +12,7 @@ export type HotelModel={
     rule:string;
     content:string;
     images: string[];
-    isAvailable:boolean;
+    status:number;
     thumbnail: string;
     createdAt: string;
     updatedAt: string;
@@ -23,4 +23,18 @@ export type HotelModel={
         price:string;
         included:string;
     }[]
+}
+
+export type HotelItemListModel = {
+     id:string;
+        name:string;
+        address:string;
+        price: string;
+        star: number,
+        roomCount: number,
+        view: number,
+        status: number,
+        createdAt: string,
+        updatedAt: string
+  
 }

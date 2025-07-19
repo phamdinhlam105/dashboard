@@ -13,18 +13,22 @@ import { toast } from "sonner";
 export default function NewPostPage() {
   const [newPost, setNewPost] = useState<Article>({
     id: "",
-    title: "Bài viết mới",
-    slug: "bai-viet-moi",
-    content: "Nội dung bài viết mới sẽ được hiển thị ở đây.",
+    title: "",
+    slug: "",
+    content: "",
     author: "",
     description: "",
     thumbnail: "",
+    view: 0,
     status: PostStatus.Draft,
     updatedAt: "",
     createdAt: "",
   });
-  const onChange = (field: string, value: string) => {
-    setNewPost((prev) => ({ ...prev, [field]: value }));
+  const onChange = (field: string, value: string | PostStatus) => {
+    setNewPost((prev) => ({
+      ...prev,
+      [field]: field === "status" ? Number(value) : value,
+    }));
   };
 
   const saveChange = async () => {
@@ -33,8 +37,8 @@ export default function NewPostPage() {
     };
 
     const res = await addNewPost(request);
-    if (res) toast.success("Cập nhật bài viết thành công");
-    else toast.error("Cập nhật thất bại");
+    if (res) toast.success("Tạo bài viết thành công");
+    else toast.error("Tạo bài viết thất bại");
   };
 
   return (

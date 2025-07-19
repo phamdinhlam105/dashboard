@@ -1,6 +1,10 @@
 "use client";
 
-import { getPostById, PostRequest, updatePost } from "@/components/api/post-api";
+import {
+  getPostById,
+  PostRequest,
+  updatePost,
+} from "@/components/api/post-api";
 import { Article } from "@/components/article/model/article-model";
 import Header from "@/components/header/header";
 import { Button } from "@/components/ui/button";
@@ -25,12 +29,17 @@ export default function PostDetailPage() {
     status: PostStatus.Draft,
     author: "",
     thumbnail: "",
+    view: 0,
   });
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchPost = async () => {
       const post = await getPostById(id);
-      if (post) setCurrentPost(post);
+      if (post) {
+        setCurrentPost(post);
+        setIsLoading(false);
+      } else toast.error("Tải dữ liệu thất bại");
     };
     fetchPost();
   }, []);
@@ -53,21 +62,25 @@ export default function PostDetailPage() {
     <>
       <Header title="Tin tức mới" />
       <div className="p-4 w-full dark:bg-black h-full space-y-4">
-        <div className="flex space-x-6">
-          <NewPostContent
-            content={currentPost.content}
-            title={currentPost.title}
-            slug={currentPost.slug}
-            onChange={onChange}
-          />
-          <NewPostInformation
-            author={currentPost.author}
-            description={currentPost.description}
-            status={currentPost.status}
-            thumbnail={currentPost.thumbnail}
-            onChange={onChange}
-          />
-        </div>
+        {isLoading ? (
+          "Đang tải dữ liệu"
+        ) : (
+          <div className="flex space-x-6">
+            <NewPostContent
+              content={currentPost.content}
+              title={currentPost.title}
+              slug={currentPost.slug}
+              onChange={onChange}
+            />
+            <NewPostInformation
+              author={currentPost.author}
+              description={currentPost.description}
+              status={currentPost.status}
+              thumbnail={currentPost.thumbnail}
+              onChange={onChange}
+            />
+          </div>
+        )}
         <Button onClick={saveChange}>Lưu thay đổi</Button>
       </div>
     </>

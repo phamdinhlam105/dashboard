@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useState } from "react";
 import { PostStatus } from "../api/enum";
 import { Input } from "../ui/input";
@@ -15,7 +15,6 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -28,16 +27,15 @@ export default function NewPostInformation({
   author,
   status,
   onChange,
-  thumbnail
+  thumbnail,
 }: {
   description: string;
   author: string;
   status: PostStatus;
-  thumbnail:string;
+  thumbnail: string;
   onChange: (field: string, value: string) => void;
 }) {
-  
-    const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   return (
     <div className="border rounded-md shadow-sm w-1/3 p-4 bg-background">
       <h2 className="text-2xl font-bold my-2">Thông tin bài viết</h2>
@@ -74,19 +72,19 @@ export default function NewPostInformation({
           <SelectContent>
             <SelectGroup defaultValue={status}>
               <SelectItem
-                value="draft"
+                value="0"
                 className="text-yellow-300 font-semibold"
               >
                 Đang soạn thảo
               </SelectItem>
               <SelectItem
-                value="published"
+                value="1"
                 className="text-green-300 font-semibold"
               >
                 Xuất bản
               </SelectItem>
               <SelectItem
-                value="deleted"
+                value="2"
                 className="text-green-300 font-semibold"
               >
                 Đã xoá
@@ -94,28 +92,28 @@ export default function NewPostInformation({
             </SelectGroup>
           </SelectContent>
         </Select>
-        <div>
-          <Label className="block text-md font-semibold">Thumbnail</Label>
-          <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            <DialogTrigger className="border-1 rounded-lg p-2 hover:bg-gray-200">
-              Chọn hình ảnh
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Chọn một ảnh cho thumbnail</DialogTitle>
-              </DialogHeader>
-              <div>
-                <ChooseFile onChange={onChange} setIsOpen={setIsOpen} />
-              </div>
-            </DialogContent>
-          </Dialog>
-          <div className="relative w-full aspect-3/2 rounded-lg shadow-md p-2">
-            {thumbnail ? (
-              <Image alt="thumbnail" src={thumbnail} fill />
-            ) : (
-              <p className="text-gray-400">Chưa có ảnh</p>
-            )}
-          </div>
+      </div>
+      <div>
+        <Label className="block text-md font-semibold">Thumbnail</Label>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+          <DialogTrigger className="border-1 rounded-lg p-2 hover:bg-gray-200">
+            Chọn hình ảnh
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Chọn một ảnh cho thumbnail</DialogTitle>
+            </DialogHeader>
+            <div>
+              <ChooseFile onChange={onChange} setIsOpen={setIsOpen} />
+            </div>
+          </DialogContent>
+        </Dialog>
+        <div className="relative w-full aspect-3/2 rounded-lg shadow-md p-2">
+          {thumbnail ? (
+            <Image alt="thumbnail" src={thumbnail} fill unoptimized/>
+          ) : (
+            <p className="text-gray-400">Chưa có ảnh</p>
+          )}
         </div>
       </div>
     </div>

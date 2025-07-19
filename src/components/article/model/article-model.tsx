@@ -11,4 +11,14 @@ export interface Article {
   updatedAt: string;
   status: PostStatus;
   author: string;
+  view: number;
 }
+
+export type PostItemList = {
+  id: string;
+  title: string;
+  updatedAt: string;
+  status: PostStatus;
+  author: string;
+  view: number;
+};

@@ -1,13 +1,12 @@
 "use client";
+import { getAllImage, getImageById } from "@/components/api/image-api";
 import ChooseFile from "@/components/file/choose-file/choose-file";
 import FileList from "@/components/file/file-list";
-import { FILE_MOCK_DATA } from "@/components/file/mock-data/file-data";
 import { FileModel } from "@/components/file/model/file-model";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -15,7 +14,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function NewTourAdditionalDetail({
   description,
@@ -42,12 +42,50 @@ export default function NewTourAdditionalDetail({
   };
   onChange: (field: string, value: string | string[]) => void;
   tourDetailOnChange: (field: string, value: string) => void;
-}) {
-  const [gallery, setGallery] = useState<FileModel[]>(
-    FILE_MOCK_DATA.filter((i) => images.includes(i.url))
-  );
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+}) {const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isOpenGallery, setIsOpenGallery] = useState<boolean>(false);
+  const [data, setData] = useState<FileModel[]>([]);
+  const [selectedFiles, setSelectedFiles] = useState<string[]>(images);
+  const [selectedImages, setSelectedImages] = useState<FileModel[]>([]);
+
+   //fetch function
+    const fetchImageById = async (id: string) => {
+      const result = await getImageById(id);
+      if (result) {
+        setSelectedImages((prev) => [...prev, result]);
+      } else toast.error("Tải ảnh không thành công");
+    };
+    const fetchData = async () => {
+      const result = await getAllImage();
+      if (result) {
+        setData(result);
+      } else toast.error("Không thể tải ảnh");
+    };
+    const fetchAllImages = async () => {
+      const results = await Promise.all(selectedFiles.map(getImageById));
+      const validResults = results.filter(Boolean);
+      if (validResults.length > 0) {
+        setSelectedImages(validResults);
+      } else {
+        toast.error("Không có ảnh nào tải thành công");
+      }
+    };
+   useEffect(() => {
+    fetchData();
+    fetchAllImages();
+  }, []);
+
+  
+  const handleChooseFile = async (id: string, isCheck: boolean) => {
+    if (isCheck) {
+      setSelectedFiles((prev) => [...prev, id]);
+      await fetchImageById(id);
+    } else {
+      setSelectedFiles(selectedFiles.filter((s) => s != id));
+      setSelectedImages(selectedImages.filter((i) => i.id != id));
+    }
+  };
+
 
   return (
     <div className="border rounded-md shadow-sm w-1/3 p-4 bg-background space-y-4">
@@ -167,7 +205,7 @@ export default function NewTourAdditionalDetail({
         </Dialog>
         <div className="relative w-full aspect-3/2 rounded-lg shadow-md p-2">
           {thumbnail ? (
-            <Image alt="thumbnail" src={thumbnail} fill />
+            <Image alt="thumbnail" src={thumbnail} fill unoptimized/>
           ) : (
             <p className="text-gray-400">Chưa có ảnh</p>
           )}
@@ -179,19 +217,14 @@ export default function NewTourAdditionalDetail({
           <DialogTrigger>Chọn hình ảnh</DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Chọn các ảnh để đưa vào gallery bài viết</DialogTitle>
+              <DialogTitle>
+                Chọn các ảnh để đưa vào gallery bài viết
+              </DialogTitle>
             </DialogHeader>
-            <FileList
-              files={FILE_MOCK_DATA}
-              selectedFiles={gallery}
-              setSelectedFiles={setGallery}
-            />
+            <FileList files={data} handleCheckChange={handleChooseFile} />
             <Button
               onClick={() => {
-                onChange(
-                  "images",
-                  gallery.map((g) => g.url)
-                );
+                onChange("images", selectedFiles);
                 setIsOpenGallery(false);
               }}
             >
@@ -199,11 +232,11 @@ export default function NewTourAdditionalDetail({
             </Button>
           </DialogContent>
         </Dialog>
-        {images && images.length > 0 ? (
+        {selectedImages && selectedImages.length > 0 ? (
           <div className="grid grid-cols-2 gap-2 rounded-md shadow-md p-2">
-            {images.map((i, idx) => (
+            {selectedImages.map((i, idx) => (
               <div key={idx} className="relative aspect-1/1 w-full">
-                <Image fill alt="thumbnail" src={i} />
+                <Image fill alt="thumbnail" src={i.url} unoptimized/>
               </div>
             ))}
           </div>

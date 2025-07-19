@@ -1,6 +1,6 @@
 import { PostStatus } from "./enum";
 
-const API_URL = `${process.env.NEXT_PUBLIC_API_LINK}post/`;
+const API_URL = `${process.env.NEXT_PUBLIC_API_LINK}post`;
 
 export interface PostRequest {
   id?: string; // Guid? => string | undefined
@@ -54,6 +54,7 @@ export const getPostById = async (id: string) => {
 
 export const addNewPost = async (request: PostRequest) => {
   try {
+    request.id = undefined;
     const response = await fetch(`${API_URL}`, {
       method: "POST",
       headers: {

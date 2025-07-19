@@ -1,9 +1,7 @@
-
-
-const API_URL = `${process.env.NEXT_PUBLIC_API_LINK}hotel/`;
+const API_URL = `${process.env.NEXT_PUBLIC_API_LINK}hotel`;
 
 export interface RoomDetailRequest {
-  id?: string;             // Guid? => string | undefined
+  id?: string; // Guid? => string | undefined
   name: string;
   capacity: string;
   included: string;
@@ -19,7 +17,7 @@ export interface HotelRequest {
   description: string;
   price: string;
   content: string;
-  isAvailable: boolean;
+  status: number;
   promotionPrice?: number;
   images: string[];
   star: number;
@@ -70,6 +68,7 @@ export const getHotelById = async (id: string) => {
 
 export const addNewHotel = async (request: HotelRequest) => {
   try {
+    request.id = undefined;
     const response = await fetch(`${API_URL}`, {
       method: "POST",
       headers: {
@@ -110,8 +109,8 @@ export const updateHotel = async (request: HotelRequest) => {
   }
 };
 
-export const getRoomDetailsByHotelId = async (idHotel:string)=>{
-     try {
+export const getRoomDetailsByHotelId = async (idHotel: string) => {
+  try {
     const response = await fetch(`${API_URL}room-details/${idHotel}`, {
       method: "GET",
       headers: {
@@ -128,4 +127,4 @@ export const getRoomDetailsByHotelId = async (idHotel:string)=>{
   } catch (error) {
     return null;
   }
-}
+};

@@ -6,19 +6,19 @@ import { useEffect, useState } from "react";
 import RoomDetail from "./room-detail";
 import { Button } from "@/components/ui/button";
 import { RefreshCcwIcon } from "lucide-react";
-import { FILE_MOCK_DATA } from "@/components/file/mock-data/file-data";
 import { FileModel } from "@/components/file/model/file-model";
 import ChooseFile from "@/components/file/choose-file/choose-file";
 import FileList from "@/components/file/file-list";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import Image from "next/image";
+import { toast } from "sonner";
+import { getAllImage, getImageById } from "@/components/api/image-api";
 
 export default function NewHotelAdditionalDetail({
   description,
@@ -47,11 +47,38 @@ export default function NewHotelAdditionalDetail({
 }) {
   const [roomNumber, setRoomNumber] = useState(roomDetails.length || 0);
   const [draftRooms, setDraftRooms] = useState(roomDetails);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpenGallery, setIsOpenGallery] = useState<boolean>(false);
+  const [data, setData] = useState<FileModel[]>([]);
+  const [selectedFiles, setSelectedFiles] = useState<string[]>(images);
+  const [selectedImages, setSelectedImages] = useState<FileModel[]>([]);
+  //fetch function
+  const fetchImageById = async (id: string) => {
+    const result = await getImageById(id);
+    if (result) {
+      setSelectedImages((prev) => [...prev, result]);
+    } else toast.error("Tải ảnh không thành công");
+  };
+  const fetchData = async () => {
+    const result = await getAllImage();
+    if (result) {
+      setData(result);
+    } else toast.error("Không thể tải ảnh");
+  };
+  const fetchAllImages = async () => {
+    const results = await Promise.all(selectedFiles.map(getImageById));
+    const validResults = results.filter(Boolean);
+    if (validResults.length > 0) {
+      setSelectedImages(validResults);
+    } else {
+      toast.error("Không có ảnh nào tải thành công");
+    }
+  };
 
+  //use effect
   useEffect(() => {
     const currentCount = draftRooms.length;
     const updated = [...draftRooms];
-
     if (roomNumber > currentCount) {
       for (let i = currentCount; i < roomNumber; i++) {
         updated.push({
@@ -65,20 +92,29 @@ export default function NewHotelAdditionalDetail({
     } else if (roomNumber < currentCount) {
       updated.splice(roomNumber);
     }
-
     setDraftRooms(updated);
   }, [roomNumber]);
 
+  useEffect(() => {
+    fetchData();
+    fetchAllImages();
+  }, []);
+
+  //handle action
   const handleRoomRefresh = () => {
     setDraftRooms(roomDetails);
     setRoomNumber(roomDetails.length);
   };
 
-  const [gallery, setGallery] = useState<FileModel[]>(
-    FILE_MOCK_DATA.filter((i) => images.includes(i.url))
-  );
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [isOpenGallery, setIsOpenGallery] = useState<boolean>(false);
+  const handleChooseFile = async (id: string, isCheck: boolean) => {
+    if (isCheck) {
+      setSelectedFiles((prev) => [...prev, id]);
+      await fetchImageById(id);
+    } else {
+      setSelectedFiles(selectedFiles.filter((s) => s != id));
+      setSelectedImages(selectedImages.filter((i) => i.id != id));
+    }
+  };
 
   return (
     <div className="border rounded-md shadow-sm w-1/3 p-4 bg-background space-y-4">
@@ -140,7 +176,7 @@ export default function NewHotelAdditionalDetail({
         </Dialog>
         <div className="relative w-full aspect-3/2 rounded-lg shadow-md p-2">
           {thumbnail ? (
-            <Image alt="thumbnail" src={thumbnail} fill />
+            <Image alt="thumbnail" src={thumbnail} fill unoptimized />
           ) : (
             <p className="text-gray-400">Chưa có ảnh</p>
           )}
@@ -152,21 +188,16 @@ export default function NewHotelAdditionalDetail({
           <DialogTrigger>Chọn hình ảnh</DialogTrigger>
           <DialogContent>
             <DialogHeader>
-               <DialogHeader>
-              <DialogTitle>Chọn các ảnh để đưa vào gallery bài viết</DialogTitle>
+              <DialogHeader>
+                <DialogTitle>
+                  Chọn các ảnh để đưa vào gallery bài viết
+                </DialogTitle>
+              </DialogHeader>
             </DialogHeader>
-            </DialogHeader>
-            <FileList
-              files={FILE_MOCK_DATA}
-              selectedFiles={gallery}
-              setSelectedFiles={setGallery}
-            />
+            <FileList files={data} handleCheckChange={handleChooseFile} />
             <Button
               onClick={() => {
-                onChange(
-                  "images",
-                  gallery.map((g) => g.url)
-                );
+                onChange("images", selectedFiles);
                 setIsOpenGallery(false);
               }}
             >
@@ -174,11 +205,11 @@ export default function NewHotelAdditionalDetail({
             </Button>
           </DialogContent>
         </Dialog>
-        {images && images.length > 0 ? (
+        {selectedImages && selectedImages.length > 0 ? (
           <div className="grid grid-cols-2 gap-2 rounded-md shadow-md p-2">
-            {images.map((i, idx) => (
+            {selectedImages.map((i, idx) => (
               <div key={idx} className="relative aspect-1/1 w-full">
-                <Image fill alt="thumbnail" src={i} />
+                <Image fill alt="thumbnail" src={i.url} unoptimized />
               </div>
             ))}
           </div>

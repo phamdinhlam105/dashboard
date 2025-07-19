@@ -1,37 +1,47 @@
 "use client";
 
+import { getAllImage } from "@/components/api/image-api";
 import FileButton from "@/components/file/file-button";
 import FileList from "@/components/file/file-list";
-import { FILE_MOCK_DATA } from "@/components/file/mock-data/file-data";
 import { FileModel } from "@/components/file/model/file-model";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function FileBody() {
-  const [files, setFiles] = useState<FileModel[]>(FILE_MOCK_DATA);
-  const [selectedFiles, setSelectedFiles] = useState<FileModel[]>([]);
+  const [data, setData] = useState<FileModel[]>([]);
+  const [filteredData, setFilteredData] = useState(data);
   const [fileChanged, setFileChanged] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        //const result = await getImages();
-        //lsetFiles(result);
-        setFiles(FILE_MOCK_DATA);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
+      const result = await getAllImage();
+      if (result) {
+        setData(result);
+        setIsLoading(false);
+      } else toast.error("Không thể tải ảnh");
     };
     if (fileChanged === true) {
-      //fetchData();
+      fetchData();
       setFileChanged(false);
     }
   }, [fileChanged]);
+
+  useEffect(() => {
+    setFilteredData(data);
+  }, [data]);
+
+    const handleChooseFile = (id: string, isCheck: boolean) => {
+    if (isCheck) setSelectedFiles((prev) => [...prev]);
+    else setSelectedFiles(selectedFiles.filter((s) => s != id));
+  };
+
   const handleSearch = (search: string) => {
-    if (search == "") setFiles(FILE_MOCK_DATA);
+    if (search == "") setFilteredData(data.filter(i=>i.name.includes(search)));
     if (search)
-      setFiles(
-        files.filter((file) =>
+      setData(
+        data.filter((file) =>
           file.name.toLowerCase().includes(search.toLowerCase())
         )
       );
@@ -40,10 +50,9 @@ export default function FileBody() {
 
   const removeSelected = async () => {
     if (selectedFiles.length > 0) {
-      setFiles((prevData) =>
-        prevData.filter((item) => !selectedFiles.includes(item))
+      setData((prevData) =>
+        prevData.filter((item) => !selectedFiles.includes(item.id))
       );
-      //selectedFiles.map(f => deleteImage(f.id));
       toast("DELETE CATEGORY", {
         description: "All selected images are deleted",
       });
@@ -59,11 +68,14 @@ export default function FileBody() {
           selectedFiles={selectedFiles}
           setFileChanged={setFileChanged}
         />
-        <FileList
-          files={files}
-          selectedFiles={selectedFiles}
-          setSelectedFiles={setSelectedFiles}
-        />
+        {isLoading ? (
+          "Đang tải dữ liệu"
+        ) : (
+          <FileList
+            files={filteredData}
+            handleCheckChange={handleChooseFile}
+          />
+        )}
       </div>
     </div>
   );
