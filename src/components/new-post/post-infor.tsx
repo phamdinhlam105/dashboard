@@ -33,7 +33,7 @@ export default function NewPostInformation({
   author: string;
   status: PostStatus;
   thumbnail: string;
-  onChange: (field: string, value: string) => void;
+  onChange: (field: string, value: string | number) => void;
 }) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   return (
@@ -65,12 +65,12 @@ export default function NewPostInformation({
 
       <div className="flex justify-between items-center my-4 space-x-2">
         <Label className="block text-md font-semibold">Trạng thái</Label>
-        <Select onValueChange={(e) => onChange("status", e)}>
+        <Select defaultValue={status.toString()} onValueChange={(e) => onChange("status", parseInt(e))}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="" />
           </SelectTrigger>
           <SelectContent>
-            <SelectGroup defaultValue={status}>
+            <SelectGroup>
               <SelectItem
                 value="0"
                 className="text-yellow-300 font-semibold"

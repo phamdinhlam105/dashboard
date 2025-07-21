@@ -67,8 +67,7 @@ export const addNewPost = async (request: PostRequest) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    const data = await response.json();
-    return data;
+    return true;
   } catch (error) {
     return null;
   }
@@ -88,8 +87,7 @@ export const updatePost = async (request: PostRequest) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    const data = await response.json();
-    return data;
+    return true;
   } catch (error) {
     return null;
   }

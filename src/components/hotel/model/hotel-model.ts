@@ -13,6 +13,7 @@ export type HotelModel={
     content:string;
     images: string[];
     status:number;
+    shouldUpdateRoom?:boolean;
     thumbnail: string;
     createdAt: string;
     updatedAt: string;

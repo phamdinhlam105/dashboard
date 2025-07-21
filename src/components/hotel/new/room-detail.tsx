@@ -3,54 +3,50 @@
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
-type Room = {
-  id?: string;
-  name: string;
-  capacity: string;
-  included: string;
-  price: string;
-};
+import { RoomDetailRequest } from "@/components/api/hotel-api";
 
 export default function RoomDetail({
   roomNumber,
   roomDetails,
+  onRoomDetailsChange,
 }: {
   roomNumber: number;
-  roomDetails: Room[];
+  roomDetails: RoomDetailRequest[];
+  onRoomDetailsChange: (rooms: RoomDetailRequest[]) => void;
 }) {
-  const [rooms, setRooms] = useState<Room[]>([]);
+  const [rooms, setRooms] = useState<RoomDetailRequest[]>([]);
 
   // Cập nhật lại danh sách rooms mỗi khi roomNumber thay đổi
- useEffect(() => {
-  const currentCount = roomDetails.length;
-  const newRooms: Room[] = [...roomDetails];
+  useEffect(() => {
+    const currentCount = roomDetails.length;
+    const newRooms: RoomDetailRequest[] = [...roomDetails];
 
-  if (roomNumber > currentCount) {
-    for (let i = currentCount; i < roomNumber; i++) {
-      newRooms.push({
-        name: "",
-        capacity: "",
-        included: "",
-        price: "0",
-      });
+    if (roomNumber > currentCount) {
+      for (let i = currentCount; i < roomNumber; i++) {
+        newRooms.push({
+          name: "",
+          capacity: "",
+          included: "",
+          price: "0",
+        });
+      }
     }
-  }
 
-  setRooms(newRooms);
-}, [roomNumber, roomDetails]);
+    setRooms(newRooms);
+  }, [roomNumber, roomDetails]);
 
   const handleChange = (
     index: number,
-    field: keyof Room,
+    field: keyof RoomDetailRequest,
     value: string | number
   ) => {
     const updated = [...rooms];
     updated[index] = {
       ...updated[index],
       [field]: value,
-    } as Room; // ✅ ép kiểu toàn bộ object về Room
+    } as RoomDetailRequest; // ✅ ép kiểu toàn bộ object về Room
     setRooms(updated);
+    onRoomDetailsChange?.(updated);
   };
 
   return (
@@ -59,7 +55,7 @@ export default function RoomDetail({
       <div className="max-h-[600px] overflow-y-auto space-y-4 pr-2">
         {rooms.map((room, index) => (
           <div
-            key={room.id}
+            key={index}
             className="border border-gray-300 rounded-lg p-4 shadow-sm space-y-4"
           >
             <h3 className="text-lg font-semibold">Phòng {index + 1}</h3>

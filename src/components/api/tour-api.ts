@@ -77,8 +77,7 @@ export const addNewTour = async (request: TourRequest) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    const data = await response.json();
-    return data;
+    return true;
   } catch (error) {
     return null;
   }
@@ -97,9 +96,7 @@ export const updateTour = async (request: TourRequest) => {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
-
-    const data = await response.json();
-    return data;
+    return true;
   } catch (error) {
     return null;
   }
@@ -118,8 +115,7 @@ export const deleteTour = async (id: string) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    const data = await response.json();
-    return data;
+    return true;
   } catch (error) {
     return null;
   }

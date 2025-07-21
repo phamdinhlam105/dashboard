@@ -55,9 +55,7 @@ export const addNewImage = async (formData: FormData) => {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
-
-    const data = await response.json();
-    return data;
+    return true;
   } catch (error) {
     return null;
   }
@@ -76,9 +74,7 @@ export const updateImage = async (request: ImageRequest) => {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
-
-    const data = await response.json();
-    return data;
+    return true;
   } catch (error) {
     return null;
   }

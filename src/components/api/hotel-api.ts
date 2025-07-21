@@ -81,8 +81,7 @@ export const addNewHotel = async (request: HotelRequest) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    const data = await response.json();
-    return data;
+    return true;
   } catch (error) {
     return null;
   }
@@ -102,8 +101,7 @@ export const updateHotel = async (request: HotelRequest) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    const data = await response.json();
-    return data;
+    return true;
   } catch (error) {
     return null;
   }

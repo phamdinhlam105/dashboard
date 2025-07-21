@@ -19,6 +19,7 @@ import {
 import Image from "next/image";
 import { toast } from "sonner";
 import { getAllImage, getImageById } from "@/components/api/image-api";
+import { RoomDetailRequest } from "@/components/api/hotel-api";
 
 export default function NewHotelAdditionalDetail({
   description,
@@ -29,6 +30,8 @@ export default function NewHotelAdditionalDetail({
   images,
   roomDetails,
   onChange,
+  roomOnChange,
+  refreshRoom,
 }: {
   description: string;
   address: string;
@@ -36,13 +39,9 @@ export default function NewHotelAdditionalDetail({
   ultilities: string;
   thumbnail: string;
   images: string[];
-  roomDetails: {
-    id: string;
-    name: string;
-    capacity: string;
-    included: string;
-    price: string;
-  }[];
+  roomOnChange: (rooms: RoomDetailRequest[]) => void;
+  refreshRoom: (rooms: RoomDetailRequest[]) => void;
+  roomDetails: RoomDetailRequest[];
   onChange: (field: string, value: string | string[]) => void;
 }) {
   const [roomNumber, setRoomNumber] = useState(roomDetails.length || 0);
@@ -82,7 +81,6 @@ export default function NewHotelAdditionalDetail({
     if (roomNumber > currentCount) {
       for (let i = currentCount; i < roomNumber; i++) {
         updated.push({
-          id: (i + 1).toString(),
           name: "",
           capacity: "",
           included: "",
@@ -103,6 +101,7 @@ export default function NewHotelAdditionalDetail({
   //handle action
   const handleRoomRefresh = () => {
     setDraftRooms(roomDetails);
+    refreshRoom(draftRooms)
     setRoomNumber(roomDetails.length);
   };
 
@@ -249,7 +248,11 @@ export default function NewHotelAdditionalDetail({
           </Button>
         </div>
       </div>
-      <RoomDetail roomNumber={roomNumber} roomDetails={draftRooms} />
+      <RoomDetail
+        roomNumber={roomNumber}
+        roomDetails={draftRooms}
+        onRoomDetailsChange={roomOnChange}
+      />
     </div>
   );
 }

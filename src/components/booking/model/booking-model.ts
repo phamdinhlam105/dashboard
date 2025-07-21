@@ -1,12 +1,16 @@
-
 export type BookingModel = {
-    id: string;
-    customerName: string;
-    customerPhone: string;
-    numberOfPerson: number;
-    bookingDate: string;
-    createDate: string;
-    tourId?: string;
-    hotelId?: string;
-    status: "Chưa đặt" | "Đã đặt" | "Hoàn thành"
-}
+  id: string;
+  customerId: string;
+  customerName: string;
+  phoneNumber: string;
+  numberOfPerson: number;
+  bookingDate: string;
+  createdAt: string;
+  tourName: string[];
+  hotelName: string[];
+  comboName: string[];
+  isOrdered: boolean;
+  isFinished: boolean;
+  email: string | null;
+  note: string | null;
+};

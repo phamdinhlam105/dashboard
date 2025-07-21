@@ -10,11 +10,18 @@ export default function ExportWithXLSX({ data }: { data: BookingModel[] }) {
     const formattedData = data.map((item, index) => ({
       STT: index + 1,
       "Tên khách": item.customerName,
-      SĐT: item.customerPhone,
+      SĐT: item.phoneNumber,
       "Số lượng khách": item.numberOfPerson,
       "Ngày đặt": item.bookingDate,
-      "Tour ID": item.tourId ?? "N/A",
-      "Hotel ID": item.hotelId ?? "N/A",
+      Tour: Array.isArray(item.tourName)
+        ? item.tourName.join(" - \n")
+        : item.tourName ?? "N/A",
+      Hotel: Array.isArray(item.hotelName)
+        ? item.hotelName.join(" - \n")
+        : item.hotelName ?? "N/A",
+      Combo: Array.isArray(item.comboName)
+        ? item.comboName.join(" - \n")
+        : item.comboName ?? "N/A",
     }));
 
     const worksheet = XLSX.utils.json_to_sheet(formattedData);
@@ -26,8 +33,9 @@ export default function ExportWithXLSX({ data }: { data: BookingModel[] }) {
       { wch: 15 }, // SĐT
       { wch: 15 }, // Số lượng khách
       { wch: 20 }, // Ngày đặt
-      { wch: 25 }, // Tour ID
-      { wch: 25 }, // Hotel ID
+      { wch: 50 }, // Tour Name
+      { wch: 50 }, // Hotel Name
+      { wch: 50 }, // Combo Name
     ];
     worksheet["!cols"] = columnWidths;
 

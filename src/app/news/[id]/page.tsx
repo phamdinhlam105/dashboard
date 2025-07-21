@@ -44,8 +44,9 @@ export default function PostDetailPage() {
     fetchPost();
   }, []);
 
-  const onChange = (field: string, value: string) => {
+  const onChange = (field: string, value: string | number) => {
     setCurrentPost((prev) => ({ ...prev, [field]: value }));
+    console.log(currentPost)
   };
 
   const saveChange = async () => {

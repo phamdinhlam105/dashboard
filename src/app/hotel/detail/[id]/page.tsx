@@ -2,6 +2,7 @@
 import {
   getHotelById,
   HotelRequest,
+  RoomDetailRequest,
   updateHotel,
 } from "@/components/api/hotel-api";
 import Header from "@/components/header/header";
@@ -16,6 +17,8 @@ import { toast } from "sonner";
 export default function HotelDetailPage() {
   const params = useParams();
   const id = params.id as string;
+  const [roomDetails, setRoomDetails] = useState<RoomDetailRequest[]>([]);
+  const [shouldUpdateRoom, setShouldUpdateRoom] = useState(false);
   const [currentHotel, setCurrentHotel] = useState<HotelModel>({
     id: "",
     name: "",
@@ -33,19 +36,20 @@ export default function HotelDetailPage() {
     thumbnail: "",
     createdAt: "",
     updatedAt: "",
+    shouldUpdateRoom: false,
     roomDetails: [],
   });
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchHotel = async () => {
-      const tours = await getHotelById(id);
-      if (tours) {
-        setCurrentHotel(tours);
-        setIsLoading(false)
-      }
-      else
-        toast.error("Không thể tải dữ liệu")
+      const result = await getHotelById(id);
+      if (result) {
+        setCurrentHotel(result);
+        setIsLoading(false);
+        const { roomDetails } = result;
+        setRoomDetails(roomDetails);
+      } else toast.error("Không thể tải dữ liệu");
     };
     fetchHotel();
   }, []);
@@ -57,11 +61,20 @@ export default function HotelDetailPage() {
     const request: HotelRequest = {
       ...currentHotel,
     };
-
+    request.roomDetails = roomDetails;
+    request.shouldUpdateRoom = shouldUpdateRoom;
     const res = await updateHotel(request);
     if (res) toast.success("Cập nhật khách sạn thành công");
     else toast.error("Cập nhật thất bại");
   };
+  const roomOnchange = (updatedRoom: RoomDetailRequest[]) => {
+    setRoomDetails(updatedRoom);
+    setShouldUpdateRoom(true);
+  };
+  const refreshRoom = (draftRooms:RoomDetailRequest[])=>{
+    setRoomDetails(draftRooms);
+    setShouldUpdateRoom(false);
+  }
 
   return (
     <>
@@ -79,6 +92,8 @@ export default function HotelDetailPage() {
             onChange={onChange}
           />
           <NewHotelAdditionalDetail
+          refreshRoom={refreshRoom}
+            roomOnChange={roomOnchange}
             description={currentHotel.description}
             images={currentHotel.images}
             thumbnail={currentHotel.thumbnail}
