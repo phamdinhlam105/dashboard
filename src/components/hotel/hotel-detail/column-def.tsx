@@ -18,7 +18,7 @@ export const getHotelColumns = ({ onDelete }: { onDelete: (idRow: string) => voi
     {
         accessorKey: "name",
         header: ({ column }) => <ColumnHeader column={column} title="Tên khách sạn" />,
-        cell: ({ row }) => <Link href={`/hotel/detail/${row.original.id}`} className="font-medium truncate">{row.getValue("name")}</Link>
+        cell: ({ row }) => <Link href={`/hotel/detail?id=${row.original.id}`} className="font-medium truncate">{row.getValue("name")}</Link>
     },
 
     {

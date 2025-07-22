@@ -4,7 +4,7 @@ import ColumnHeader from "@/components/table/column-header"
 import ActionCell from "@/components/table/action-cell"
 import SelectHeader from "@/components/table/select-header"
 import SelectCell from "@/components/table/select-cell"
-import { Article, PostItemList } from "../model/article-model"
+import { PostItemList } from "../model/article-model"
 import { PostStatus } from "@/components/api/enum"
 import { formatDateTime } from "@/lib/datetime-format"
 import Link from "next/link"
@@ -20,7 +20,7 @@ export const getArticleColumns = ({ onDelete }: { onDelete: (idRow: string) => v
         accessorKey: "title",
         header: ({ column }) => <ColumnHeader column={column} title="Tiêu đề" />
         ,
-        cell: ({ row }) => <div className=" font-medium truncate"><Link href={`/news/${row.original.id}`}>{row.getValue("title")}</Link> </div>
+        cell: ({ row }) => <div className=" font-medium truncate"><Link href={`/news/detail?id=${row.original.id}`}>{row.getValue("title")}</Link> </div>
     },
 
     {

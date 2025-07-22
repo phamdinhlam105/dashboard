@@ -8,7 +8,7 @@ import {
 import { Article } from "@/components/article/model/article-model";
 import Header from "@/components/header/header";
 import { Button } from "@/components/ui/button";
-import { useParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import NewPostContent from "@/components/new-post/content";
@@ -16,8 +16,9 @@ import NewPostInformation from "@/components/new-post/post-infor";
 import { PostStatus } from "@/components/api/enum";
 
 export default function PostDetailPage() {
-  const params = useParams();
-  const id = params.id as string;
+   const searchParams = useSearchParams();
+  const id = searchParams.get("id") || "";
+
   const [currentPost, setCurrentPost] = useState<Article>({
     id: "",
     title: "",

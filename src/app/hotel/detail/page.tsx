@@ -10,13 +10,13 @@ import { HotelModel } from "@/components/hotel/model/hotel-model";
 import NewHotelAdditionalDetail from "@/components/hotel/new/hotel-additional-detail";
 import NewHotelContent from "@/components/hotel/new/hotel-content";
 import { Button } from "@/components/ui/button";
-import { useParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function HotelDetailPage() {
-  const params = useParams();
-  const id = params.id as string;
+   const searchParams = useSearchParams();
+  const id = searchParams.get("id") || "";
   const [roomDetails, setRoomDetails] = useState<RoomDetailRequest[]>([]);
   const [shouldUpdateRoom, setShouldUpdateRoom] = useState(false);
   const [currentHotel, setCurrentHotel] = useState<HotelModel>({

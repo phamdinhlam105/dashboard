@@ -22,7 +22,7 @@ export const getTourColumns = ({
     header: ({ column }) => <ColumnHeader column={column} title="Tên tour" />,
     cell: ({ row }) => (
       <Link
-        href={`/tour/detail/${row.original.id}`}
+        href={`/tour/detail?id=${row.original.id}`}
         className="font-medium truncate"
       >
         {row.getValue("name")}
