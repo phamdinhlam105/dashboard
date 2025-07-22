@@ -13,7 +13,30 @@ import { toast } from "sonner";
 export default function TourDetailPage() {
   const params = useParams();
   const id = params.id as string;
-  const [currentTour, setCurrentTour] = useState<TourModel>(TOUR_MOCK_DATA[0]);
+  const [currentTour, setCurrentTour] = useState<TourModel>({
+    id:'',
+    name: '',
+  slug: '',
+  description: '',
+  price: '',
+  startingPlace: '',
+  schedule: '',
+  scheduleDetail: '',
+  status: 1,
+  tourDetail: {
+    location: '',
+    food: '',
+    suitablePerson: '',
+    idealTime: '',
+    transportation: '',
+    promotion:'',
+  },
+  images: [],
+  thumbnail: '',
+  createdAt: '',
+  updatedAt: '',
+
+  });
   const [isLoading,setIsLoading] = useState(true);
   
   useEffect(() => {

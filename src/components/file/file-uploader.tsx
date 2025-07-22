@@ -39,7 +39,7 @@ export function FileUploader({
     formData.append("name", fileName);
 
     const result = await addNewImage(formData);
-    if (result.status === "success") {
+    if (result) {
       toast.success("Up ảnh thành công");
       setFileChanged(true);
       setFile(null);

@@ -27,22 +27,33 @@ export default function ChooseFile({
     fetchData();
   }, []);
 
+  const thumbnailFiles = data.filter(file =>
+  file.name.toLowerCase().includes("thumbnail")
+);
+
   return (
     <div>
-      <ul className="list grid grid-cols-3 p-4 gap-4">
+      <ul className="list grid grid-cols-3 p-4 gap-4 max-h-[600px] overflow-y-auto">
         {isLoading
           ? "Đang tải ảnh"
-          : data.map((file, idx) => (
+          : thumbnailFiles.map((file, idx) => (
               <li key={idx}>
                 <Button
                   variant="ghost"
-                  className="relative aspect-2/3 w-full"
+                  className="w-full h-fit flex flex-col items-center"
                   onClick={() => {
                     onChange("thumbnail", file.url);
                     setIsOpen(false);
                   }}
                 >
-                  <Image alt="image" src={file.url} width={100} height={100} unoptimized />
+                  <Image
+                    alt="image"
+                    src={file.url}
+                    width={100}
+                    height={100}
+                    unoptimized
+                  />
+                  <p className="text-xs text-wrap text-center">{file.name}</p>
                 </Button>
               </li>
             ))}
