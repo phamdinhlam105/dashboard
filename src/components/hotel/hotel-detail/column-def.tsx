@@ -36,7 +36,7 @@ export const getHotelColumns = ({ onDelete }: { onDelete: (idRow: string) => voi
     {
         accessorKey: "price",
         header: ({ column }) => <ColumnHeader column={column} title="Giá" />,
-        cell: ({ row }) => <div className="w-28 font-medium text-center">{row.getValue("price")}</div>
+        cell: ({ row }) => <div className="w-28 font-medium text-center">{parseInt(row.original.price).toLocaleString("vi-VN")}</div>
     },  
     {
         accessorKey: "roomNumber",

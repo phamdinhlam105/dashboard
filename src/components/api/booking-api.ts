@@ -1,11 +1,15 @@
+import { getAccessToken } from "@/lib/cookie-handler";
+
 const API_URL = `${process.env.NEXT_PUBLIC_API_LINK}booking`;
 
 export const getAllBooking = async () => {
   try {
+    const token = getAccessToken();
     const response = await fetch(`${API_URL}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
       },
     });
 

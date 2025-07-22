@@ -8,12 +8,13 @@ import { LogOut, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
+import { removeAccessToken } from "@/lib/cookie-handler";
 
 export default function Header({ title }: { title: string }) {
     const router = useRouter();
 
-    const handleLogout = async () => {
-        //await signOut({ redirect: false });
+    const handleLogout = () => {
+        removeAccessToken();
         toast( "LOGOUT",{
             description: "Log out successfully"
         });

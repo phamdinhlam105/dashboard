@@ -1,4 +1,5 @@
 "use client";
+import { loginAuth } from "@/components/api/login-auth";
 import { addNewTour, TourRequest } from "@/components/api/tour-api";
 import Header from "@/components/header/header";
 import NewTourAdditionalDetail from "@/components/tour/new-tour/tour-additional-detail";
@@ -8,6 +9,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 export default function NewTourPage() {
+  loginAuth();
   const [currentTour, setCurrentTour] = useState({
     name: "",
     slug: "",

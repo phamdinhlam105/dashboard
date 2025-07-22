@@ -1,5 +1,10 @@
 "use client";
-import { getTourById, TourRequest, updateTour } from "@/components/api/tour-api";
+import { loginAuth } from "@/components/api/login-auth";
+import {
+  getTourById,
+  TourRequest,
+  updateTour,
+} from "@/components/api/tour-api";
 import Header from "@/components/header/header";
 import { TourModel } from "@/components/tour/model/tour-model";
 import NewTourAdditionalDetail from "@/components/tour/new-tour/tour-additional-detail";
@@ -10,45 +15,44 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function TourDetailPage() {
-   const searchParams = useSearchParams();
+  loginAuth();
+  const searchParams = useSearchParams();
   const id = searchParams.get("id") || "";
   const [currentTour, setCurrentTour] = useState<TourModel>({
-    id:'',
-    name: '',
-  slug: '',
-  description: '',
-  price: '',
-  startingPlace: '',
-  schedule: '',
-  scheduleDetail: '',
-  status: 1,
-  tourDetail: {
-    location: '',
-    food: '',
-    suitablePerson: '',
-    idealTime: '',
-    transportation: '',
-    promotion:'',
-  },
-  images: [],
-  thumbnail: '',
-  createdAt: '',
-  updatedAt: '',
-
+    id: "",
+    name: "",
+    slug: "",
+    description: "",
+    price: "",
+    startingPlace: "",
+    schedule: "",
+    scheduleDetail: "",
+    status: 1,
+    tourDetail: {
+      location: "",
+      food: "",
+      suitablePerson: "",
+      idealTime: "",
+      transportation: "",
+      promotion: "",
+    },
+    images: [],
+    thumbnail: "",
+    createdAt: "",
+    updatedAt: "",
   });
-  
+
   useEffect(() => {
     const fetchTours = async () => {
       const tours = await getTourById(id);
       if (tours) {
         setCurrentTour(tours);
-      }
-      else toast.error("Không thể tải dữ liệu")
+      } else toast.error("Không thể tải dữ liệu");
     };
 
     fetchTours();
   }, []);
-  
+
   const onChange = (field: string, value: string | string[]) => {
     setCurrentTour((prev) => ({ ...prev, [field]: value }));
   };

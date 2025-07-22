@@ -1,6 +1,7 @@
 "use client";
 
 import { PostStatus } from "@/components/api/enum";
+import { loginAuth } from "@/components/api/login-auth";
 import { addNewPost, PostRequest } from "@/components/api/post-api";
 import { Article } from "@/components/article/model/article-model";
 import Header from "@/components/header/header";
@@ -11,6 +12,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 export default function NewPostPage() {
+  loginAuth();
   const [newPost, setNewPost] = useState<Article>({
     id: "",
     title: "",

@@ -14,9 +14,11 @@ import { toast } from "sonner";
 import NewPostContent from "@/components/new-post/content";
 import NewPostInformation from "@/components/new-post/post-infor";
 import { PostStatus } from "@/components/api/enum";
+import { loginAuth } from "@/components/api/login-auth";
 
 export default function PostDetailPage() {
-   const searchParams = useSearchParams();
+  loginAuth();
+  const searchParams = useSearchParams();
   const id = searchParams.get("id") || "";
 
   const [currentPost, setCurrentPost] = useState<Article>({
@@ -47,7 +49,6 @@ export default function PostDetailPage() {
 
   const onChange = (field: string, value: string | number) => {
     setCurrentPost((prev) => ({ ...prev, [field]: value }));
-    console.log(currentPost)
   };
 
   const saveChange = async () => {

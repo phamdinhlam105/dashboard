@@ -1,3 +1,4 @@
+import { getAccessToken } from "@/lib/cookie-handler";
 import { PostStatus } from "./enum";
 
 const API_URL = `${process.env.NEXT_PUBLIC_API_LINK}post`;
@@ -14,10 +15,12 @@ export interface PostRequest {
 }
 export const getAllPost = async () => {
   try {
+    const token = getAccessToken();
     const response = await fetch(`${API_URL}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
       },
     });
 
@@ -34,10 +37,12 @@ export const getAllPost = async () => {
 
 export const getPostById = async (id: string) => {
   try {
+    const token = getAccessToken();
     const response = await fetch(`${API_URL}/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
       },
     });
 
@@ -54,11 +59,13 @@ export const getPostById = async (id: string) => {
 
 export const addNewPost = async (request: PostRequest) => {
   try {
+    const token = getAccessToken();
     request.id = undefined;
     const response = await fetch(`${API_URL}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
       },
       body: JSON.stringify(request),
     });
@@ -75,10 +82,12 @@ export const addNewPost = async (request: PostRequest) => {
 
 export const updatePost = async (request: PostRequest) => {
   try {
+    const token = getAccessToken();
     const response = await fetch(`${API_URL}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
       },
       body: JSON.stringify(request),
     });
@@ -95,10 +104,12 @@ export const updatePost = async (request: PostRequest) => {
 
 export const deletePost = async (id: string) => {
   try {
+    const token = getAccessToken();
     const response = await fetch(`${API_URL}/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
       },
     });
 

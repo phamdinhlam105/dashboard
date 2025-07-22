@@ -60,7 +60,7 @@ export const getTourColumns = ({
     accessorKey: "price",
     header: ({ column }) => <ColumnHeader column={column} title="Giá" />,
     cell: ({ row }) => (
-      <div className="w-28 font-medium">{row.getValue("price")}</div>
+      <div className="w-28 font-medium">{parseInt(row.original.price).toLocaleString("vi-VN")}</div>
     ),
   },
   {

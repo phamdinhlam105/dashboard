@@ -1,5 +1,10 @@
 "use client";
-import { addNewHotel, HotelRequest } from "@/components/api/hotel-api";
+import { loginAuth } from "@/components/api/login-auth";
+import {
+  addNewHotel,
+  HotelRequest,
+  RoomDetailRequest,
+} from "@/components/api/hotel-api";
 import Header from "@/components/header/header";
 import { HotelModel } from "@/components/hotel/model/hotel-model";
 import NewHotelAdditionalDetail from "@/components/hotel/new/hotel-additional-detail";
@@ -9,6 +14,9 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 export default function NewHotelPage() {
+  loginAuth();
+  const [roomDetails, setRoomDetails] = useState<RoomDetailRequest[]>([]);
+  const [shouldUpdateRoom, setShouldUpdateRoom] = useState(false);
   const [newHotel, setNewHotel] = useState<HotelModel>({
     id: "",
     name: "",
@@ -17,7 +25,7 @@ export default function NewHotelPage() {
     star: 4,
     createdAt: "",
     updatedAt: "",
-    status:1,
+    status: 1,
     description: "",
     content: "",
     price: "",
@@ -34,16 +42,24 @@ export default function NewHotelPage() {
   };
 
   const saveChange = async () => {
-    const request:HotelRequest={
+    const request: HotelRequest = {
       ...newHotel,
-    }
+    };
+    request.roomDetails = roomDetails;
+    request.shouldUpdateRoom = undefined;
     const res = await addNewHotel(request);
-    if(res)
-      toast.success("Thêm khách sạn thành công")
-    else
-      toast.error("Thêm khách sạn thất bại")
+    if (res) toast.success("Thêm khách sạn thành công");
+    else toast.error("Thêm khách sạn thất bại");
+  };
+  const roomOnchange = (updatedRoom: RoomDetailRequest[]) => {
+    setRoomDetails(updatedRoom);
+    setShouldUpdateRoom(true);
   };
 
+  const refreshRoom = (draftRooms: RoomDetailRequest[]) => {
+    setRoomDetails(draftRooms);
+    setShouldUpdateRoom(false);
+  };
   return (
     <>
       <Header title="Khách sạn mới" />
@@ -65,6 +81,8 @@ export default function NewHotelPage() {
           price={newHotel.price}
           roomDetails={newHotel.roomDetails}
           onChange={onChange}
+          roomOnChange={roomOnchange}
+          refreshRoom={refreshRoom}
         />
       </div>
       <Button variant="default" className="w-1/4 h-10 m-4" onClick={saveChange}>

@@ -1,3 +1,5 @@
+import { getAccessToken } from "@/lib/cookie-handler";
+
 const API_URL = `${process.env.NEXT_PUBLIC_API_LINK}hotel`;
 
 export interface RoomDetailRequest {
@@ -28,10 +30,12 @@ export interface HotelRequest {
 
 export const getAllHotel = async () => {
   try {
+    const token = getAccessToken();
     const response = await fetch(`${API_URL}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
       },
     });
 
@@ -48,10 +52,12 @@ export const getAllHotel = async () => {
 
 export const getHotelById = async (id: string) => {
   try {
+    const token = getAccessToken();
     const response = await fetch(`${API_URL}/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
       },
     });
 
@@ -68,11 +74,13 @@ export const getHotelById = async (id: string) => {
 
 export const addNewHotel = async (request: HotelRequest) => {
   try {
+    const token = getAccessToken();
     request.id = undefined;
     const response = await fetch(`${API_URL}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
       },
       body: JSON.stringify(request),
     });
@@ -89,10 +97,12 @@ export const addNewHotel = async (request: HotelRequest) => {
 
 export const updateHotel = async (request: HotelRequest) => {
   try {
+    const token = getAccessToken();
     const response = await fetch(`${API_URL}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
       },
       body: JSON.stringify(request),
     });
@@ -109,10 +119,12 @@ export const updateHotel = async (request: HotelRequest) => {
 
 export const getRoomDetailsByHotelId = async (idHotel: string) => {
   try {
+    const token = getAccessToken();
     const response = await fetch(`${API_URL}room-details/${idHotel}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
       },
     });
 

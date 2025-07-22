@@ -5,6 +5,7 @@ import {
   RoomDetailRequest,
   updateHotel,
 } from "@/components/api/hotel-api";
+import { loginAuth } from "@/components/api/login-auth";
 import Header from "@/components/header/header";
 import { HotelModel } from "@/components/hotel/model/hotel-model";
 import NewHotelAdditionalDetail from "@/components/hotel/new/hotel-additional-detail";
@@ -15,7 +16,8 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function HotelDetailPage() {
-   const searchParams = useSearchParams();
+  loginAuth();
+  const searchParams = useSearchParams();
   const id = searchParams.get("id") || "";
   const [roomDetails, setRoomDetails] = useState<RoomDetailRequest[]>([]);
   const [shouldUpdateRoom, setShouldUpdateRoom] = useState(false);
@@ -71,10 +73,10 @@ export default function HotelDetailPage() {
     setRoomDetails(updatedRoom);
     setShouldUpdateRoom(true);
   };
-  const refreshRoom = (draftRooms:RoomDetailRequest[])=>{
+  const refreshRoom = (draftRooms: RoomDetailRequest[]) => {
     setRoomDetails(draftRooms);
     setShouldUpdateRoom(false);
-  }
+  };
 
   return (
     <>
@@ -92,7 +94,7 @@ export default function HotelDetailPage() {
             onChange={onChange}
           />
           <NewHotelAdditionalDetail
-          refreshRoom={refreshRoom}
+            refreshRoom={refreshRoom}
             roomOnChange={roomOnchange}
             description={currentHotel.description}
             images={currentHotel.images}

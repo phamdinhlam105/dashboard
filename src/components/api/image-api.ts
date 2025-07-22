@@ -1,3 +1,5 @@
+import { getAccessToken } from "@/lib/cookie-handler";
+
 const API_URL = `${process.env.NEXT_PUBLIC_API_LINK}image`;
 
 type ImageRequest = {
@@ -7,10 +9,12 @@ type ImageRequest = {
 };
 export const getAllImage = async () => {
   try {
+    const token = getAccessToken();
     const response = await fetch(`${API_URL}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
       },
     });
 
@@ -27,10 +31,12 @@ export const getAllImage = async () => {
 
 export const getImageById = async (id: string) => {
   try {
+    const token = getAccessToken();
     const response = await fetch(`${API_URL}/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
       },
     });
 
@@ -47,8 +53,12 @@ export const getImageById = async (id: string) => {
 
 export const addNewImage = async (formData: FormData) => {
   try {
+    const token = getAccessToken();
     const response = await fetch(`${API_URL}`, {
       method: "POST",
+      headers:{
+        "Authorization": `Bearer ${token}`,
+      },
       body: formData,
     });
 
@@ -63,10 +73,12 @@ export const addNewImage = async (formData: FormData) => {
 
 export const updateImage = async (request: ImageRequest) => {
   try {
+    const token = getAccessToken();
     const response = await fetch(`${API_URL}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
       },
       body: JSON.stringify(request),
     });
@@ -82,10 +94,12 @@ export const updateImage = async (request: ImageRequest) => {
 
 export const deleteImage = async (id: string) => {
   try {
+    const token = getAccessToken();
     const response = await fetch(`${API_URL}/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
       },
     });
 

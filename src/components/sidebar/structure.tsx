@@ -45,17 +45,13 @@ export const SidebarStructure = [
     icon: Folders,
   },
   {
-    title: "Cài đặt",
-    url: "/settings",
+    title: "Combo",
+    url: "/combo",
     icon: Settings,
     items: [
-      {
-        title: "Tài khoản",
-        url: "/settings/account",
-      },
-      {
-        title: "Giao diện",
-        url: "/settings/appearance",
+       {
+        title: "Tạo combo mới",
+        url: "/combo/new",
       },
     ],
   },
