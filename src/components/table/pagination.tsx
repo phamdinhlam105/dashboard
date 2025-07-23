@@ -3,13 +3,13 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { PaginationState, Table } from "@tanstack/react-table";
 
-interface PaginationProps {
-  table: Table<any>;
+interface PaginationProps<TData> {
+  table: Table<TData>;
   pagination: PaginationState;
   setPagination: React.Dispatch<React.SetStateAction<PaginationState>>;
 }
 
-const Pagination: React.FC<PaginationProps> = ({ table, pagination, setPagination }) => {
+export default function Pagination<TData>({ table, pagination, setPagination }: PaginationProps<TData>) {
   return (
     <div className="flex items-center justify-between space-x-2 py-4">
       <div>
@@ -73,5 +73,3 @@ const Pagination: React.FC<PaginationProps> = ({ table, pagination, setPaginatio
     </div>
   );
 };
-
-export default Pagination;

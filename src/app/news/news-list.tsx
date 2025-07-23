@@ -27,7 +27,10 @@ export default function NewsList() {
     setFilteredData(data);
   }, [data]);
 
-  const onDelete = (id: string) => {};
+  const onDelete = (id: string) => {
+    setFilteredData(filteredData.filter((d) => d.id != id));
+    setFilteredData(filteredData.filter((d) => !selectedIds.includes(d.id)));
+  };
 
   const searchTitle = (search: string) => {
     const lowerSearch = search.toLowerCase();
@@ -48,7 +51,6 @@ export default function NewsList() {
     <div className="p-3 w-full dark:bg-black h-full">
       <ActionsNavigation
         searchTitle={searchTitle}
-        onDelete={onDelete}
         allStatus={["Bản thảo", "Đã xuất bản", "Đã xoá"]}
         searchStatus={statusFilter}
         newItemLink="/news/new"

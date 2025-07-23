@@ -1,5 +1,5 @@
 "use client";
-import { loginAuth } from "@/components/api/login-auth";
+import { useLoginAuth } from "@/components/api/login-auth";
 import {
   addNewHotel,
   HotelRequest,
@@ -14,9 +14,8 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 export default function NewHotelPage() {
-  loginAuth();
+  useLoginAuth();
   const [roomDetails, setRoomDetails] = useState<RoomDetailRequest[]>([]);
-  const [shouldUpdateRoom, setShouldUpdateRoom] = useState(false);
   const [newHotel, setNewHotel] = useState<HotelModel>({
     id: "",
     name: "",
@@ -53,12 +52,10 @@ export default function NewHotelPage() {
   };
   const roomOnchange = (updatedRoom: RoomDetailRequest[]) => {
     setRoomDetails(updatedRoom);
-    setShouldUpdateRoom(true);
   };
 
   const refreshRoom = (draftRooms: RoomDetailRequest[]) => {
     setRoomDetails(draftRooms);
-    setShouldUpdateRoom(false);
   };
   return (
     <>

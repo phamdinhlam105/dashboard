@@ -30,7 +30,7 @@ export const getAllPost = async () => {
 
     const data = await response.json();
     return data;
-  } catch (error) {
+  } catch {
     return null;
   }
 };
@@ -52,7 +52,7 @@ export const getPostById = async (id: string) => {
 
     const data = await response.json();
     return data;
-  } catch (error) {
+  } catch {
     return null;
   }
 };
@@ -75,7 +75,7 @@ export const addNewPost = async (request: PostRequest) => {
     }
 
     return true;
-  } catch (error) {
+  } catch {
     return null;
   }
 };
@@ -97,7 +97,7 @@ export const updatePost = async (request: PostRequest) => {
     }
 
     return true;
-  } catch (error) {
+  } catch {
     return null;
   }
 };
@@ -119,7 +119,7 @@ export const deletePost = async (id: string) => {
 
     const data = await response.json();
     return data;
-  } catch (error) {
+  } catch {
     return null;
   }
 };

@@ -45,7 +45,7 @@ export const getAllHotel = async () => {
 
     const data = await response.json();
     return data;
-  } catch (error) {
+  } catch {
     return null;
   }
 };
@@ -67,7 +67,7 @@ export const getHotelById = async (id: string) => {
 
     const data = await response.json();
     return data;
-  } catch (error) {
+  } catch {
     return null;
   }
 };
@@ -90,7 +90,7 @@ export const addNewHotel = async (request: HotelRequest) => {
     }
 
     return true;
-  } catch (error) {
+  } catch {
     return null;
   }
 };
@@ -112,7 +112,7 @@ export const updateHotel = async (request: HotelRequest) => {
     }
 
     return true;
-  } catch (error) {
+  } catch {
     return null;
   }
 };
@@ -134,7 +134,7 @@ export const getRoomDetailsByHotelId = async (idHotel: string) => {
 
     const data = await response.json();
     return data;
-  } catch (error) {
+  } catch {
     return null;
   }
 };

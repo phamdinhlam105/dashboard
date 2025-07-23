@@ -12,3 +12,7 @@ export function formatDateTime(input: string): string {
 
   return `${day}/${month}/${year} ${hours}:${minutes}`;
 }
+
+export function formatDateOnly(date: Date) {
+  return date.toISOString().split("T")[0];
+}

@@ -1,10 +1,10 @@
 "use client";
 import Header from "@/components/header/header";
 import NewsList from "./news-list";
-import { loginAuth } from "@/components/api/login-auth";
+import { useLoginAuth } from "@/components/api/login-auth";
 
 export default function NewsPage() {
-  loginAuth();
+  useLoginAuth();
   return (
     <>
       <Header title="Tin tức" />

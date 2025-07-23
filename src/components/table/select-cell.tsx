@@ -1,11 +1,11 @@
 import { Row } from "@tanstack/react-table";
 import { Checkbox } from "../ui/checkbox";
 
-interface SelectCellProps {
-    row: Row<any>
+interface SelectCellProps<TData> {
+    row: Row<TData>
 }
 
-const SelectCell: React.FC<SelectCellProps> = ({ row }) => {
+export default function SelectCell<TData>({row}:SelectCellProps<TData>){
 
     return (
         <div className="w-8 items-center flex justify-between">
@@ -17,5 +17,3 @@ const SelectCell: React.FC<SelectCellProps> = ({ row }) => {
         </div>
     )
 }
-
-export default SelectCell

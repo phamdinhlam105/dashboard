@@ -1,28 +1,30 @@
 "use client";
-import { useLoginAuth } from "@/components/api/login-auth";
-import { addNewTour, TourRequest } from "@/components/api/tour-api";
-import Header from "@/components/header/header";
+import {
+  getTourById,
+  TourRequest,
+  updateTour,
+} from "@/components/api/tour-api";
+import { TourModel } from "@/components/tour/model/tour-model";
 import NewTourAdditionalDetail from "@/components/tour/new-tour/tour-additional-detail";
 import NewTourContent from "@/components/tour/new-tour/tour-content";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-export default function NewTourPage() {
-  useLoginAuth();
-  const route = useRouter();
-  const [currentTour, setCurrentTour] = useState({
+export default function TourDetailBody() {
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id") || "";
+  const [currentTour, setCurrentTour] = useState<TourModel>({
+    id: "",
     name: "",
     slug: "",
+    description: "",
+    price: "",
+    startingPlace: "",
     schedule: "",
     scheduleDetail: "",
-    description: "",
-    startingPlace: "",
-    price: "",
-    thumbnail: "",
-    status:1,
-    images: [],
+    status: 1,
     tourDetail: {
       location: "",
       food: "",
@@ -31,7 +33,23 @@ export default function NewTourPage() {
       transportation: "",
       promotion: "",
     },
+    images: [],
+    thumbnail: "",
+    createdAt: "",
+    updatedAt: "",
   });
+
+  useEffect(() => {
+    const fetchTours = async () => {
+      const tours = await getTourById(id);
+      if (tours) {
+        setCurrentTour(tours);
+      } else toast.error("Không thể tải dữ liệu");
+    };
+
+    fetchTours();
+  }, []);
+
   const onChange = (field: string, value: string | string[]) => {
     setCurrentTour((prev) => ({ ...prev, [field]: value }));
   };
@@ -44,7 +62,6 @@ export default function NewTourPage() {
       },
     }));
   };
-
   const saveChange = async () => {
     const {
       location,
@@ -64,17 +81,12 @@ export default function NewTourPage() {
       transportation,
       promotion,
     };
-    const res = await addNewTour(request);
-    if (res) {
-      toast.success("Tạo tour mới thành công");
-      route.push("/tour")
-    }
-    else toast.error("Tạo mới không thành công");
+    const res = await updateTour(request);
+    if (res) toast.success("Cập nhật tour thành công");
+    else toast.error("Cập nhật thất bại");
   };
-
   return (
     <div>
-      <Header title="Tour mới" />
       <div className="p-4 flex space-x-4">
         <NewTourContent
           name={currentTour.name}
@@ -93,9 +105,9 @@ export default function NewTourPage() {
           onChange={onChange}
           tourDetailOnChange={onTourDetailChange}
         />
-      </div>
+      </div>{" "}
       <Button variant="default" className="w-1/4 h-10 m-4" onClick={saveChange}>
-        Tạo tour mới
+        Lưu thay đổi
       </Button>
     </div>
   );

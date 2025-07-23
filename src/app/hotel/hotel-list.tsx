@@ -32,6 +32,7 @@ export default function HotelList() {
     setData((prev) =>
       prev.map((item) => (item.id === id ? { ...item, status: 0 } : item))
     );
+    setFilteredData(filteredData.filter((d) => !selectedIds.includes(d.id)));
   };
 
   const searchTitle = (search: string) => {
@@ -53,7 +54,6 @@ export default function HotelList() {
     <div className="p-3 w-full dark:bg-black h-full">
       <ActionsNavigation
         searchTitle={searchTitle}
-        onDelete={onDelete}
         allStatus={["1 sao", "2 sao", "3 sao", "4 sao", "5 sao"]}
         searchStatus={starFilter}
         newItemLink="/hotel/new"

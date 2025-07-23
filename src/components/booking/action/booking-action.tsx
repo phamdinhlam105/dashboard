@@ -3,7 +3,6 @@ import ExportWithXLSX from "./export-excel";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
@@ -35,7 +34,7 @@ export default function BookingAction({
                 variant="ghost"
                 className="w-full"
                 key={item}
-                onClick={(e) => filterByStatus(item)}
+                onClick={() => filterByStatus(item)}
               >
                 {item}
               </Button>
@@ -43,7 +42,7 @@ export default function BookingAction({
             <Button
               variant="ghost"
               className="w-full"
-              onClick={(e) => filterByStatus("")}
+              onClick={() => filterByStatus("")}
             >
               Mặc định
             </Button>

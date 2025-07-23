@@ -24,7 +24,7 @@ export const getAllImage = async () => {
 
     const data = await response.json();
     return data;
-  } catch (error) {
+  } catch {
     return null;
   }
 };
@@ -46,7 +46,7 @@ export const getImageById = async (id: string) => {
 
     const data = await response.json();
     return data;
-  } catch (error) {
+  } catch {
     return null;
   }
 };
@@ -66,7 +66,7 @@ export const addNewImage = async (formData: FormData) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     return true;
-  } catch (error) {
+  } catch {
     return null;
   }
 };
@@ -87,7 +87,7 @@ export const updateImage = async (request: ImageRequest) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     return true;
-  } catch (error) {
+  } catch {
     return null;
   }
 };
@@ -109,7 +109,7 @@ export const deleteImage = async (id: string) => {
 
     const data = await response.json();
     return data;
-  } catch (error) {
+  } catch {
     return null;
   }
 };

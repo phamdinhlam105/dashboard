@@ -48,7 +48,7 @@ export default function RichTextEditor({
             const html = editor.getData();
             onChange(html);
           }}
-          editor={ClassicEditor as any}
+          editor={ClassicEditor}
           data={data}
           config={{
             licenseKey: "GPL",

@@ -22,7 +22,7 @@ export const login = async (userName: string, password: string) => {
     const data = await response.json();
     setAccessToken("access_token", data.token);
     return true;
-  } catch (error) {
+  } catch {
     return null;
   }
 };

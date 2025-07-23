@@ -35,7 +35,6 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData extends { id: string }, TValue>({
   columns,
   data,
-  onDelete,
   onSelectionChange,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);

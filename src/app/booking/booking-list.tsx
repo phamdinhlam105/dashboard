@@ -25,6 +25,7 @@ export default function BookingList() {
   
   const handleDelete = (idRow: string) => {
     setBookings((prev) => prev.filter((booking) => booking.id !== idRow));
+    
   };
   const onRowSelectionChange = (ids: string[]) => {
     setSelectedIds(ids);
@@ -43,7 +44,7 @@ export default function BookingList() {
   const columns = getBookingColumns({ onDelete: handleDelete });
   return (
     <div className="p-3 w-full dark:bg-black h-full">
-      <BookingAction data={bookings} filterByStatus={filterByStatus} />
+      <BookingAction data={bookings.filter(b=>selectedIds.includes(b.id))} filterByStatus={filterByStatus} />
       <DataTable
         columns={columns}
         data={filteredData}

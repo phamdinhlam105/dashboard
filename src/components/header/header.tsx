@@ -1,5 +1,4 @@
 "use client"
-import DefaultAvatar from "@/components/profile/default-avatar";
 import { PROFILE } from "@/components/profile/constants/profile.constants";
 import { DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { SidebarTrigger } from "@/components/ui/sidebar";

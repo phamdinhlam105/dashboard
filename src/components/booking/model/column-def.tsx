@@ -4,6 +4,7 @@ import SelectHeader from "@/components/table/select-header";
 import SelectCell from "@/components/table/select-cell";
 import Link from "next/link";
 import { BookingModel } from "./booking-model";
+import ActionCell from "@/components/table/action-cell";
 
 export const getBookingColumns = ({
   onDelete,
@@ -107,6 +108,13 @@ export const getBookingColumns = ({
           <span className="text-gray-400">Không có combo</span>
         )}
       </div>
+    ),
+  },
+  {
+    accessorKey: "action",
+    header: ({ column }) => <ColumnHeader column={column} title="Combo" />,
+    cell: ({ row }) => (
+      <ActionCell idRow={row.original.id} onDelete={onDelete} />
     ),
   },
 ];

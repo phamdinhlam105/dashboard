@@ -15,13 +15,11 @@ import Link from "next/link";
 
 export default function ActionsNavigation({
   searchTitle,
-  onDelete,
   allStatus,
   searchStatus,
   newItemLink,
 }: {
   searchTitle: (search: string) => void;
-  onDelete: (idRow: string) => void;
   allStatus: string[];
   searchStatus: (selectedStatus: number) => void;
   newItemLink: string;
@@ -60,7 +58,7 @@ export default function ActionsNavigation({
                 <Button
                   variant="ghost"
                   key={item}
-                  onClick={(e) => setStatusSearch(idx)}
+                  onClick={() => setStatusSearch(idx)}
                 >
                   {item}
                 </Button>

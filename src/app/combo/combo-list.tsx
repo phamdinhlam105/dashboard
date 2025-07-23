@@ -2,34 +2,33 @@
 import { DataTable } from "@/components/table/data-table";
 import { useEffect, useState } from "react";
 import ActionsNavigation from "@/components/table/actions-navigation";
-import { TourItemList } from "@/components/tour/model/tour-model";
-import { getTourColumns } from "@/components/tour/tour-detail/column-def";
-import { getAllTour } from "@/components/api/tour-api";
-import { toast } from "sonner";
+import { ComboItemList } from "@/components/combo/model/combo-model";
+import { getComboColumns } from "@/components/combo/column-def/combo-column";
 
-export default function TourList() {
-  const [data, setData] = useState<TourItemList[]>([]);
-  const [filteredData, setFilteredData] = useState<TourItemList[]>(data);
+export default function ComboList() {
+  const [data, setData] = useState<ComboItemList[]>([]);
+  const [filteredData, setFilteredData] = useState<ComboItemList[]>(data);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  useEffect(() => {
-    const fetchTours = async () => {
-      const tours = await getAllTour();
-      if (tours) {
-        setData(tours);
-        setIsLoading(false);
-      } else toast.error("Không thể tải dữ liệu");
-    };
-    fetchTours();
-  }, []);
+  const [isLoading, setIsLoading] = useState(false);
+//   useEffect(() => {
+//     const fetchTours = async () => {
+//       const tours = await getAllTour();
+//       if (tours) {
+//         setData(tours);
+//         setIsLoading(false);
+//       } else toast.error("Không thể tải dữ liệu");
+//     };
+//     fetchTours();
+//   }, []);
   useEffect(() => {
     setFilteredData(data);
+    setIsLoading(false)
   }, [data]);
   const onDelete = (id: string) => {
     setData((prev) =>
       prev.map((item) => (item.id === id ? { ...item, status: 0 } : item))
     );
-    setFilteredData(filteredData.filter(d=>!selectedIds.includes(d.id)))
+    setData(data.filter(d=>!selectedIds.includes(d.id)))
   };
 
   const searchTitle = (search: string) => {
@@ -40,21 +39,28 @@ export default function TourList() {
   };
 
   const statusFilter = (selectedStatus: number) => {
-    setFilteredData(data.filter((item) => item.status == selectedStatus));
+    if (selectedStatus == 1)
+      setFilteredData(
+        data.filter(
+          (item) =>
+            new Date(item.applyDate) <= new Date() &&
+            new Date(item.endDate) >= new Date()
+        )
+      );
   };
 
   const onSelectionChange = (ids: string[]) => {
     setSelectedIds(ids);
   };
 
-  const columns = getTourColumns({ onDelete });
+  const columns = getComboColumns({ onDelete });
   return (
     <div className="p-3 w-full dark:bg-black h-full">
       <ActionsNavigation
         searchTitle={searchTitle}
         allStatus={["unavailable", "available"]}
         searchStatus={statusFilter}
-        newItemLink="/tour/new"
+        newItemLink="/combo/new"
       />
       {isLoading ? (
         "Đang tải dữ liệu"

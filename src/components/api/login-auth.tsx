@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 
-export function loginAuth() {
+export function useLoginAuth() {
   const router = useRouter();
 
   useEffect(() => {

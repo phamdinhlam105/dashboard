@@ -41,7 +41,7 @@ export const getAllTour = async () => {
 
     const data = await response.json();
     return data;
-  } catch (error) {
+  } catch {
     return null;
   }
 };
@@ -63,7 +63,7 @@ export const getTourById = async (id: string) => {
 
     const data = await response.json();
     return data;
-  } catch (error) {
+  } catch {
     return null;
   }
 };
@@ -86,7 +86,7 @@ export const addNewTour = async (request: TourRequest) => {
     }
 
     return true;
-  } catch (error) {
+  } catch {
     return null;
   }
 };
@@ -107,7 +107,7 @@ export const updateTour = async (request: TourRequest) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     return true;
-  } catch (error) {
+  } catch {
     return null;
   }
 };
@@ -128,7 +128,7 @@ export const deleteTour = async (id: string) => {
     }
 
     return true;
-  } catch (error) {
+  } catch {
     return null;
   }
 };
