@@ -16,3 +16,10 @@ export function formatDateTime(input: string): string {
 export function formatDateOnly(date: Date) {
   return date.toISOString().split("T")[0];
 }
+
+export function parseViDateString(viDateStr: string): Date | undefined {
+  const [day, month, year] = viDateStr.split('/').map(Number);
+
+  if (!day || !month || !year) return undefined;
+  return new Date(year, month - 1, day || 0);
+}

@@ -1,18 +1,33 @@
 "use client";
+import DatePicker from "@/components/date-picker/date-picker";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { parseViDateString } from "@/lib/datetime-format";
 
 export default function NewCombo({
   name,
   slug,
   description,
   onChange,
+  applyDate,
+  endDate,
 }: {
   name: string;
   slug: string;
   description: string;
+  applyDate: string;
+  endDate: string;
   onChange: (field: string, value: string) => void;
 }) {
+  const applyDateChange = (date: Date | undefined) => {
+    if (date) onChange("applyDate", date.toLocaleDateString("vi-VN"));
+    else onChange("applyDate", new Date().toLocaleDateString("vi-VN"));
+  };
+  const endDateChange = (date: Date | undefined) => {
+    if (date) onChange("endDate", date.toLocaleDateString("vi-VN"));
+    else onChange("applyDate", new Date().toLocaleDateString("vi-VN"));
+    console.log(applyDate + endDate);
+  };
   return (
     <div className="w-2/3 space-y-3">
       <Label
@@ -62,7 +77,10 @@ export default function NewCombo({
         >
           Ngày bắt đầu
         </Label>
-        
+        <DatePicker
+          date={parseViDateString(applyDate)}
+          onChange={applyDateChange}
+        />
       </div>
       <div className="flex justify-between">
         <Label
@@ -71,6 +89,10 @@ export default function NewCombo({
         >
           Ngày kết thúc
         </Label>
+        <DatePicker
+          date={parseViDateString(endDate)}
+          onChange={endDateChange}
+        />
       </div>
     </div>
   );
