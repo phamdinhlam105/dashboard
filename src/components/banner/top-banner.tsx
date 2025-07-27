@@ -16,7 +16,7 @@ import { Button } from "../ui/button";
 import { FileModel } from "../file/model/file-model";
 import { getAllImage } from "../api/image-api";
 import { toast } from "sonner";
-import { updateBanner } from "../api/banner-api";
+import { getCurrentTopBanner, updateBanner } from "../api/banner-api";
 
 export default function TopBannerEdit() {
   const [isUsingBanner, setIsUsingBanner] = useState<BannerModel>({
@@ -54,7 +54,16 @@ export default function TopBannerEdit() {
     } else toast.error("Không thể tải ảnh");
   };
 
+  const fetchBanner = async () => {
+    const result = await getCurrentTopBanner();
+    if (result) setIsUsingBanner(result);
+    else toast.error("Tải banner thất bại");
+  };
   //use effect
+  useEffect(() => {
+    fetchBanner();
+  }, []);
+
   useEffect(() => {
     fetchData();
     setSelectedDesktopFiles(isUsingBanner?.images);
@@ -115,7 +124,10 @@ export default function TopBannerEdit() {
       responsiveImages: selectedResponsiveFiles,
     }));
     const result = await updateBanner(isUsingBanner);
-    if (result) toast.success("Lưu thay đổi thành công");
+    if (result) {
+      toast.success("Lưu thay đổi thành công");
+      setIsUsingBanner(result);
+    }
   };
   return (
     <div className="p-4 w-full dark:bg-black h-full space-y-4">

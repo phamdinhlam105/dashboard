@@ -1,4 +1,4 @@
-import { BookOpenText, ListTree, Folders, Settings } from "lucide-react";
+import { BookOpenText, Folders, Map, Hotel, Newspaper, Handshake, AppWindow } from "lucide-react";
 
 export const SidebarStructure = [
   {
@@ -9,7 +9,7 @@ export const SidebarStructure = [
   {
     title: "Tour",
     url: "/tour",
-    icon: BookOpenText,
+    icon: Map,
     items: [
       {
         title: "Tạo Tour mới",
@@ -20,7 +20,7 @@ export const SidebarStructure = [
   {
     title: "Khách sạn",
     url: "/hotel",
-    icon: ListTree,
+    icon: Hotel,
     items: [
       {
         title: "Tạo khách sạn mới",
@@ -31,7 +31,7 @@ export const SidebarStructure = [
   {
     title: "Tin tức",
     url: "/news",
-    icon: ListTree,
+    icon: Newspaper,
     items: [
       {
         title: "Tạo bài viết mới",
@@ -47,12 +47,17 @@ export const SidebarStructure = [
   {
     title: "Combo",
     url: "/combo",
-    icon: Settings,
+    icon: Handshake,
     items: [
        {
         title: "Tạo combo mới",
         url: "/combo/new",
       },
     ],
+  },
+   {
+    title: "Banner",
+    url: "/banner",
+    icon: AppWindow,
   },
 ];
