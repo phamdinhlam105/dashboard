@@ -5,6 +5,7 @@ import SelectCell from "@/components/table/select-cell";
 import Link from "next/link";
 import { BookingModel } from "./booking-model";
 import ActionCell from "@/components/table/action-cell";
+import { CircleCheck, CirclePlus, UserCheck } from "lucide-react";
 
 export const getBookingColumns = ({
   onDelete,
@@ -22,7 +23,7 @@ export const getBookingColumns = ({
     cell: ({ row }) => (
       <Link
         href={`/tour/detail/${row.original.id}`}
-        className="font-medium truncate"
+        className="font-medium w-40"
       >
         {row.original.customerName}
       </Link>
@@ -33,88 +34,78 @@ export const getBookingColumns = ({
     accessorKey: "bookingDate",
     header: ({ column }) => <ColumnHeader column={column} title="Ngày đặt" />,
     cell: ({ row }) => (
-      <div className="font-medium text-gray-400 w-20">
-        {row.getValue("bookingDate")}
+      <div className="font-medium text-gray-400 flex justify-center">
+        {row.original.bookingDate}
       </div>
+    ),
+  },
+  {
+    accessorKey: "phone",
+    header: ({ column }) => (
+      <ColumnHeader column={column} title="Số điện thoại" />
+    ),
+    cell: ({ row }) => (
+      <div className="font-medium flex items-center justify-center">{row.original.phoneNumber}</div>
     ),
   },
   {
     accessorKey: "numberOfPerson",
     header: ({ column }) => <ColumnHeader column={column} title="Số khách" />,
     cell: ({ row }) => (
-      <div className="font-medium text-center text-gray-400 w-20">
+      <div className="font-medium text-center text-gray-400 w-fit">
         {row.getValue("numberOfPerson")}
       </div>
     ),
   },
   {
-    accessorKey: "status",
-    header: ({ column }) => <ColumnHeader column={column} title="Trạng thái" />,
-    cell: ({ row }) => (
-      <div className="w-23 font-medium mx-auto">
-        {row.original.isFinished ? (
-          <span className="text-green-500">Hoàn thành</span>
-        ) : row.original.isOrdered ? (
-          <span className="text-yellow-500">Đã đặt</span>
-        ) : (
-          <span className="text-red-500">Chưa đặt</span>
-        )}
-      </div>
+    accessorKey: "bookingItem",
+    header: ({ column }) => (
+      <ColumnHeader column={column} title="Các chương trình" />
     ),
-  },
-  {
-    accessorKey: "tourBooking",
-    header: ({ column }) => <ColumnHeader column={column} title="Tour" />,
     cell: ({ row }) => (
-      <div className="w-28 font-medium flex flex-col">
+      <div className="font-medium text-sm w-80 whitespace-normal break-words">
+        <p className="font-bold">Tour:</p>
         {row.original.tourName?.map((tour) => (
-          <span key={tour} className="text-gray-400 truncate w-40">
+          <p key={tour} className="text-gray-400">
             - {tour}
-          </span>
+          </p>
         ))}
-        {row.original.tourName?.length == 0 && (
-          <span className="text-gray-400">Không có tour</span>
-        )}
-      </div>
-    ),
-  },
-  {
-    accessorKey: "hotelBooking",
-    header: ({ column }) => <ColumnHeader column={column} title="Khách sạn" />,
-    cell: ({ row }) => (
-      <div className="w-28 font-medium flex flex-col">
+          <p className="font-bold">Khách sạn:</p>
         {row.original.hotelName?.map((tour) => (
-          <span key={tour} className="text-gray-400 truncate w-40">
+          <p key={tour} className="text-gray-400">
             - {tour}
-          </span>
+          </p>
         ))}
-        {row.original.hotelName?.length == 0 && (
-          <span className="text-gray-400">Không có khách san</span>
-        )}
-      </div>
-    ),
-  },
-  {
-    accessorKey: "comboBooking",
-    header: ({ column }) => <ColumnHeader column={column} title="Combo" />,
-    cell: ({ row }) => (
-      <div className="w-28 font-medium flex flex-col">
+          <p className="font-bold">Combo:</p>
         {row.original.comboName?.map((tour) => (
-          <span key={tour} className="text-gray-400 truncate w-40">
+          <p key={tour} className="text-gray-400">
             - {tour}
-          </span>
+          </p>
         ))}
-        {row.original.comboName?.length == 0 && (
-          <span className="text-gray-400">Không có combo</span>
-        )}
       </div>
     ),
   },
+
   {
     accessorKey: "action",
-    header: ({ column }) => <ColumnHeader column={column} title="Combo" />,
+    header: ({ column }) => <ColumnHeader column={column} title="Hành động" />,
     cell: ({ row }) => (
-      <ActionCell idRow={row.original.id} onDelete={onDelete} />
+      <div className="flex justify-center font-medium items-center">
+        {row.original.isFinished ? (
+          <span className="text-neutral-500">
+            <UserCheck />
+          </span>
+        ) : row.original.isOrdered ? (
+          <span className="text-yellow-500">
+            <CircleCheck />
+          </span>
+        ) : (
+          <span className="text-green-500">
+            <CirclePlus />
+          </span>
+        )}
+        <ActionCell idRow={row.original.id} onDelete={onDelete} />
+      </div>
     ),
   },
 ];

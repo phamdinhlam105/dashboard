@@ -8,7 +8,7 @@ interface SelectCellProps<TData> {
 export default function SelectCell<TData>({row}:SelectCellProps<TData>){
 
     return (
-        <div className="w-8 items-center flex justify-between">
+        <div className="items-center flex justify-between">
             <Checkbox
                 checked={row.getIsSelected()}
                 onCheckedChange={(value) => row.toggleSelected(!!value)}

@@ -74,6 +74,7 @@ export default function FileBody() {
           <FileList
             files={filteredData}
             handleCheckChange={handleChooseFile}
+            checkedFiles={selectedFiles}
           />
         )}
       </div>

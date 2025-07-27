@@ -4,7 +4,7 @@ import { getArticleColumns } from "@/components/article/column-def/columns";
 import { useEffect, useState } from "react";
 import ActionsNavigation from "@/components/table/actions-navigation";
 import { PostItemList } from "@/components/article/model/article-model";
-import { getAllPost } from "@/components/api/post-api";
+import { deletePost, getAllPost } from "@/components/api/post-api";
 import { toast } from "sonner";
 
 export default function NewsList() {
@@ -12,14 +12,16 @@ export default function NewsList() {
   const [filteredData, setFilteredData] = useState<PostItemList[]>(data);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const fecthPost = async () => {
+    const result = await getAllPost();
+    if (result) {
+      setData(result);
+      setIsLoading(false);
+    } else toast.error("Không thể tải dữ liệu");
+  };
+
   useEffect(() => {
-    const fecthPost = async () => {
-      const result = await getAllPost();
-      if (result) {
-        setData(result);
-        setIsLoading(false);
-      } else toast.error("Không thể tải dữ liệu");
-    };
     fecthPost();
   }, []);
 
@@ -27,9 +29,13 @@ export default function NewsList() {
     setFilteredData(data);
   }, [data]);
 
-  const onDelete = (id: string) => {
-    setFilteredData(filteredData.filter((d) => d.id != id));
-    setFilteredData(filteredData.filter((d) => !selectedIds.includes(d.id)));
+  const onDelete = async (id: string) => {
+    const result = await deletePost(id);
+    if (result) {
+      toast.success("Xoá bài viết thành công");
+      await fecthPost();
+    }
+    setFilteredData(filteredData.filter(d=>!selectedIds.includes(d.id)))
   };
 
   const searchTitle = (search: string) => {

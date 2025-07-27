@@ -9,7 +9,7 @@ export default function SelectHeader<TData>({
   table,
 }: SelectHeaderProps<TData>) {
   return (
-    <div className="w-8 items-center flex justify-between">
+    <div className="flex justify-between items-center">
       <Checkbox
         checked={table.getIsAllPageRowsSelected()}
         onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}

@@ -33,10 +33,10 @@ export const getTourColumns = ({
   {
     accessorKey: "updatedAt",
     header: ({ column }) => (
-      <ColumnHeader column={column} title="Ngày cập nhật" />
+      <ColumnHeader column={column} title="Cập nhật" />
     ),
     cell: ({ row }) => (
-      <div className="font-medium text-gray-400 w-20">
+      <div className="font-medium text-sm text-gray-400 flex justify-center">
         {formatDateTime(row.getValue("updatedAt"))}
       </div>
     ),
@@ -60,7 +60,9 @@ export const getTourColumns = ({
     accessorKey: "price",
     header: ({ column }) => <ColumnHeader column={column} title="Giá" />,
     cell: ({ row }) => (
-      <div className="w-28 font-medium">{parseInt(row.original.price).toLocaleString("vi-VN")}</div>
+      <div className="flex justify-end font-medium">
+        {parseInt(row.original.price).toLocaleString("vi-VN")}
+      </div>
     ),
   },
   {
@@ -69,7 +71,11 @@ export const getTourColumns = ({
       <div className="flex justify-center w-24 text-sm">Hành động</div>
     ),
     cell: ({ row }) => {
-      return <ActionCell idRow={row.original.id} onDelete={onDelete} />;
+      return (
+        <div className="flex justify-center">
+          <ActionCell idRow={row.original.id} onDelete={onDelete} />
+        </div>
+      );
     },
   },
 ];

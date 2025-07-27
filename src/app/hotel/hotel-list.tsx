@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import ActionsNavigation from "@/components/table/actions-navigation";
 import { HotelItemListModel } from "@/components/hotel/model/hotel-model";
 import { getHotelColumns } from "@/components/hotel/hotel-detail/column-def";
-import { getAllHotel } from "@/components/api/hotel-api";
+import { deleteHotel, getAllHotel } from "@/components/api/hotel-api";
 import { toast } from "sonner";
 
 export default function HotelList() {
@@ -13,14 +13,16 @@ export default function HotelList() {
   const [filteredData, setFilteredData] = useState<HotelItemListModel[]>(data);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const fetchHotels = async () => {
+    const hotels = await getAllHotel();
+    if (hotels) {
+      setData(hotels);
+      setIsLoading(false);
+    } else toast.error("Không thể tải dữ liệu");
+  };
+
   useEffect(() => {
-    const fetchHotels = async () => {
-      const hotels = await getAllHotel();
-      if (hotels) {
-        setData(hotels);
-        setIsLoading(false);
-      } else toast.error("Không thể tải dữ liệu");
-    };
     fetchHotels();
   }, []);
 
@@ -28,10 +30,12 @@ export default function HotelList() {
     setFilteredData(data);
   }, [data]);
 
-  const onDelete = (id: string) => {
-    setData((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, status: 0 } : item))
-    );
+  const onDelete = async (id: string) => {
+    const result = await deleteHotel(id);
+    if (result) {
+      toast.success("Xoá khách sạn thành công");
+      await fetchHotels();
+    }
     setFilteredData(filteredData.filter((d) => !selectedIds.includes(d.id)));
   };
 

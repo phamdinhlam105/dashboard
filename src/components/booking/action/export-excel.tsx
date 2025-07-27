@@ -5,7 +5,13 @@ import { saveAs } from "file-saver";
 import { BookingModel } from "../model/booking-model";
 import { Button } from "@/components/ui/button";
 
-export default function ExportWithXLSX({ data }: { data: BookingModel[] }) {
+export default function ExportWithXLSX({
+  data,
+  bookingExport,
+}: {
+  data: BookingModel[];
+  bookingExport: () => void;
+}) {
   const handleExport = () => {
     const formattedData = data.map((item, index) => ({
       STT: index + 1,
@@ -65,7 +71,13 @@ export default function ExportWithXLSX({ data }: { data: BookingModel[] }) {
   };
 
   return (
-    <Button onClick={handleExport} variant="outline">
+    <Button
+      onClick={() => {
+        handleExport();
+        bookingExport();
+      }}
+      variant="outline"
+    >
       Xuất Excel bằng SheetJS
     </Button>
   );

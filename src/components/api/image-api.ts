@@ -2,7 +2,7 @@ import { getAccessToken } from "@/lib/cookie-handler";
 
 const API_URL = `${process.env.NEXT_PUBLIC_API_LINK}image`;
 
-type ImageRequest = {
+export type ImageRequest = {
   id: string;
   name: string;
   url: string;
@@ -14,7 +14,7 @@ export const getAllImage = async () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -36,7 +36,7 @@ export const getImageById = async (id: string) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
@@ -56,8 +56,8 @@ export const addNewImage = async (formData: FormData) => {
     const token = getAccessToken();
     const response = await fetch(`${API_URL}`, {
       method: "POST",
-      headers:{
-        "Authorization": `Bearer ${token}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
       body: formData,
     });
@@ -74,11 +74,11 @@ export const addNewImage = async (formData: FormData) => {
 export const updateImage = async (request: ImageRequest) => {
   try {
     const token = getAccessToken();
-    const response = await fetch(`${API_URL}`, {
+    const response = await fetch(`${API_URL}/${request.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(request),
     });
@@ -86,7 +86,8 @@ export const updateImage = async (request: ImageRequest) => {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
-    return true;
+    const data = await response.json();
+    return data;
   } catch {
     return null;
   }
@@ -99,16 +100,14 @@ export const deleteImage = async (id: string) => {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
-
-    const data = await response.json();
-    return data;
+    return true;
   } catch {
     return null;
   }

@@ -51,7 +51,7 @@ export function DataTable<TData extends { id: string }, TValue>({
   React.useEffect(() => {
     const selectedIds = table
       .getSelectedRowModel()
-      .rows.map((row) => row.id as string);
+      .rows.map((row) => row.original.id as string);
     onSelectionChange?.(selectedIds);
   }, [rowSelection]);
 
@@ -81,10 +81,10 @@ export function DataTable<TData extends { id: string }, TValue>({
       <Table className="text-md border rounded-md">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id} className="divide-x ">
+            <TableRow key={headerGroup.id} className="divide-x">
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead key={header.id} className="px-3 font-bold">
+                  <TableHead key={header.id} className="px-2 font-bold">
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -106,7 +106,7 @@ export function DataTable<TData extends { id: string }, TValue>({
                 className="divide-x"
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id} className="max-w-96 px-3">
+                  <TableCell key={cell.id} className="px-2">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}

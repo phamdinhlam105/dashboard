@@ -42,50 +42,41 @@ export default function NewTourAdditionalDetail({
   };
   onChange: (field: string, value: string | string[]) => void;
   tourDetailOnChange: (field: string, value: string) => void;
-}) {const [isOpen, setIsOpen] = useState<boolean>(false);
+}) {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isOpenGallery, setIsOpenGallery] = useState<boolean>(false);
   const [data, setData] = useState<FileModel[]>([]);
-  const [selectedFiles, setSelectedFiles] = useState<string[]>(images);
+  const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
   const [selectedImages, setSelectedImages] = useState<FileModel[]>([]);
 
-   //fetch function
-    const fetchImageById = async (id: string) => {
-      const result = await getImageById(id);
-      if (result) {
-        setSelectedImages((prev) => [...prev, result]);
-      } else toast.error("Tải ảnh không thành công");
-    };
-    const fetchData = async () => {
-      const result = await getAllImage();
-      if (result) {
-        setData(result);
-      } else toast.error("Không thể tải ảnh");
-    };
-    const fetchAllImages = async () => {
-      const results = await Promise.all(selectedFiles.map(getImageById));
-      const validResults = results.filter(Boolean);
-      if (validResults.length > 0) {
-        setSelectedImages(validResults);
-      } else {
-        toast.error("Không có ảnh nào tải thành công");
-      }
-    };
-   useEffect(() => {
+  //fetch function
+  const fetchData = async () => {
+    const result = await getAllImage();
+    if (result) {
+      setData(result);
+    } else toast.error("Không thể tải ảnh");
+  };
+  useEffect(() => {
     fetchData();
-    fetchAllImages();
-  }, []);
+    setSelectedFiles(images);
+  }, [images]);
 
-  
+  useEffect(() => {
+    setSelectedImages(data.filter((d) => selectedFiles.includes(d.id)));
+  },[data]);
+
   const handleChooseFile = async (id: string, isCheck: boolean) => {
     if (isCheck) {
-      setSelectedFiles((prev) => [...prev, id]);
-      await fetchImageById(id);
+      const checkedImages = data.findLast((d) => d.id === id);
+      if (checkedImages) {
+        setSelectedFiles((prev) => [...prev, id]);
+        setSelectedImages((prev) => [...prev, checkedImages]);
+      }
     } else {
       setSelectedFiles(selectedFiles.filter((s) => s != id));
       setSelectedImages(selectedImages.filter((i) => i.id != id));
     }
   };
-
 
   return (
     <div className="border rounded-md shadow-sm w-1/3 p-4 bg-background space-y-4">
@@ -205,7 +196,7 @@ export default function NewTourAdditionalDetail({
         </Dialog>
         <div className="relative w-full aspect-3/2 rounded-lg shadow-md p-2">
           {thumbnail ? (
-            <Image alt="thumbnail" src={thumbnail} fill unoptimized/>
+            <Image alt="thumbnail" src={thumbnail} fill unoptimized />
           ) : (
             <p className="text-gray-400">Chưa có ảnh</p>
           )}
@@ -214,14 +205,21 @@ export default function NewTourAdditionalDetail({
       <div className="space-y-2">
         <Label className="block text-md font-semibold">Gallery</Label>
         <Dialog open={isOpenGallery} onOpenChange={setIsOpenGallery}>
-          <DialogTrigger>Chọn hình ảnh</DialogTrigger>
+          <DialogTrigger className="border-1 rounded-lg p-2 hover:bg-gray-200">
+            Chọn hình ảnh
+          </DialogTrigger>
           <DialogContent>
             <DialogHeader>
               <DialogTitle>
                 Chọn các ảnh để đưa vào gallery bài viết
               </DialogTitle>
             </DialogHeader>
-            <FileList files={data} handleCheckChange={handleChooseFile} />
+            <FileList
+              files={data}
+              handleCheckChange={handleChooseFile}
+              checkedFiles={selectedFiles}
+              showUrl={false}
+            />
             <Button
               onClick={() => {
                 onChange("images", selectedFiles);
@@ -236,7 +234,7 @@ export default function NewTourAdditionalDetail({
           <div className="grid grid-cols-2 gap-2 rounded-md shadow-md p-2">
             {selectedImages.map((i, idx) => (
               <div key={idx} className="relative aspect-1/1 w-full">
-                <Image fill alt="thumbnail" src={i.url} unoptimized/>
+                <Image fill alt={`gallery ${idx}`} src={i.url} unoptimized />
               </div>
             ))}
           </div>

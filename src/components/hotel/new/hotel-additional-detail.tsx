@@ -52,26 +52,12 @@ export default function NewHotelAdditionalDetail({
   const [selectedFiles, setSelectedFiles] = useState<string[]>(images);
   const [selectedImages, setSelectedImages] = useState<FileModel[]>([]);
   //fetch function
-  const fetchImageById = async (id: string) => {
-    const result = await getImageById(id);
-    if (result) {
-      setSelectedImages((prev) => [...prev, result]);
-    } else toast.error("Tải ảnh không thành công");
-  };
+
   const fetchData = async () => {
     const result = await getAllImage();
     if (result) {
       setData(result);
     } else toast.error("Không thể tải ảnh");
-  };
-  const fetchAllImages = async () => {
-    const results = await Promise.all(selectedFiles.map(getImageById));
-    const validResults = results.filter(Boolean);
-    if (validResults.length > 0) {
-      setSelectedImages(validResults);
-    } else {
-      toast.error("Không có ảnh nào tải thành công");
-    }
   };
 
   //use effect
@@ -95,20 +81,27 @@ export default function NewHotelAdditionalDetail({
 
   useEffect(() => {
     fetchData();
-    fetchAllImages();
-  }, []);
+    setSelectedFiles(images);
+  }, [images]);
+
+  useEffect(() => {
+    setSelectedImages(data.filter((d) => selectedFiles.includes(d.id)));
+  }, [data]);
 
   //handle action
   const handleRoomRefresh = () => {
     setDraftRooms(roomDetails);
-    refreshRoom(draftRooms)
+    refreshRoom(draftRooms);
     setRoomNumber(roomDetails.length);
   };
 
   const handleChooseFile = async (id: string, isCheck: boolean) => {
     if (isCheck) {
-      setSelectedFiles((prev) => [...prev, id]);
-      await fetchImageById(id);
+      const checkedImages = data.findLast((d) => d.id === id);
+      if (checkedImages) {
+        setSelectedFiles((prev) => [...prev, id]);
+        setSelectedImages((prev) => [...prev, checkedImages]);
+      }
     } else {
       setSelectedFiles(selectedFiles.filter((s) => s != id));
       setSelectedImages(selectedImages.filter((i) => i.id != id));
@@ -184,8 +177,10 @@ export default function NewHotelAdditionalDetail({
       <div className="space-y-2">
         <Label className="block text-md font-semibold">Gallery</Label>
         <Dialog open={isOpenGallery} onOpenChange={setIsOpenGallery}>
-          <DialogTrigger>Chọn hình ảnh</DialogTrigger>
-          <DialogContent>
+          <DialogTrigger className="border-1 rounded-lg p-2 hover:bg-gray-200">
+            Chọn hình ảnh
+          </DialogTrigger>
+          <DialogContent className="w-full">
             <DialogHeader>
               <DialogHeader>
                 <DialogTitle>
@@ -193,7 +188,12 @@ export default function NewHotelAdditionalDetail({
                 </DialogTitle>
               </DialogHeader>
             </DialogHeader>
-            <FileList files={data} handleCheckChange={handleChooseFile} />
+            <FileList
+              files={data}
+              handleCheckChange={handleChooseFile}
+              checkedFiles={selectedFiles}
+              showUrl={false}
+            />
             <Button
               onClick={() => {
                 onChange("images", selectedFiles);

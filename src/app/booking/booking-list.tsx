@@ -1,11 +1,12 @@
 "use client";
 
-import { getAllBooking } from "@/components/api/booking-api";
+import { bookingOrdered, getAllBooking } from "@/components/api/booking-api";
 import BookingAction from "@/components/booking/action/booking-action";
 import { BookingModel } from "@/components/booking/model/booking-model";
 import { getBookingColumns } from "@/components/booking/model/column-def";
 import { DataTable } from "@/components/table/data-table";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function BookingList() {
   const [bookings, setBookings] = useState<BookingModel[]>([]);
@@ -22,13 +23,23 @@ export default function BookingList() {
   useEffect(() => {
     setFilteredData(bookings);
   }, [bookings]);
-  
+
   const handleDelete = (idRow: string) => {
     setBookings((prev) => prev.filter((booking) => booking.id !== idRow));
-    
   };
   const onRowSelectionChange = (ids: string[]) => {
     setSelectedIds(ids);
+    console.log(bookings.filter((b) => selectedIds.includes(b.id)));
+  };
+
+  const bookingExport = async () => {
+    for (const id of selectedIds) {
+      const success = await bookingOrdered(id);
+      if (!success) {
+        toast.error("Xuất file thất bại ở id " + id);
+        break;
+      }
+    }
   };
 
   const filterByStatus = (status: string) => {
@@ -44,7 +55,11 @@ export default function BookingList() {
   const columns = getBookingColumns({ onDelete: handleDelete });
   return (
     <div className="p-3 w-full dark:bg-black h-full">
-      <BookingAction data={bookings.filter(b=>selectedIds.includes(b.id))} filterByStatus={filterByStatus} />
+      <BookingAction
+        data={bookings.filter((b) => selectedIds.includes(b.id))}
+        filterByStatus={filterByStatus}
+        bookingExport={bookingExport}
+      />
       <DataTable
         columns={columns}
         data={filteredData}

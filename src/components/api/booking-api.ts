@@ -9,7 +9,29 @@ export const getAllBooking = async () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch {
+    return null;
+  }
+};
+
+export const bookingOrdered = async (id: string) => {
+  try {
+    const token = getAccessToken();
+    const response = await fetch(`${API_URL}/ordered/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
 

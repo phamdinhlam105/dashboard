@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import ActionsNavigation from "@/components/table/actions-navigation";
 import { TourItemList } from "@/components/tour/model/tour-model";
 import { getTourColumns } from "@/components/tour/tour-detail/column-def";
-import { getAllTour } from "@/components/api/tour-api";
+import { deleteTour, getAllTour } from "@/components/api/tour-api";
 import { toast } from "sonner";
 
 export default function TourList() {
@@ -12,24 +12,27 @@ export default function TourList() {
   const [filteredData, setFilteredData] = useState<TourItemList[]>(data);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const fetchTours = async () => {
+    const tours = await getAllTour();
+    if (tours) {
+      setData(tours);
+      setIsLoading(false);
+    } else toast.error("Không thể tải dữ liệu");
+  };
+
   useEffect(() => {
-    const fetchTours = async () => {
-      const tours = await getAllTour();
-      if (tours) {
-        setData(tours);
-        setIsLoading(false);
-      } else toast.error("Không thể tải dữ liệu");
-    };
     fetchTours();
   }, []);
   useEffect(() => {
     setFilteredData(data);
   }, [data]);
-  const onDelete = (id: string) => {
-    setData((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, status: 0 } : item))
-    );
-    setFilteredData(filteredData.filter(d=>!selectedIds.includes(d.id)))
+  const onDelete = async (id: string) => {
+    const result = await deleteTour(id);
+    if (result) {
+      toast.success("Đã xoá tour thành công");
+      await fetchTours();
+    }
+    setFilteredData(filteredData.filter((d) => !selectedIds.includes(d.id)));
   };
 
   const searchTitle = (search: string) => {
@@ -52,7 +55,7 @@ export default function TourList() {
     <div className="p-3 w-full dark:bg-black h-full">
       <ActionsNavigation
         searchTitle={searchTitle}
-        allStatus={["unavailable", "available"]}
+        allStatus={["Ngưng hoạt động", "Đang hoạt động"]}
         searchStatus={statusFilter}
         newItemLink="/tour/new"
       />

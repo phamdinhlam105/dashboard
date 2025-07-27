@@ -117,6 +117,29 @@ export const updateHotel = async (request: HotelRequest) => {
   }
 };
 
+export const deleteHotel = async (idHotel: string) => {
+  try {
+    const token = getAccessToken();
+    const response = await fetch(`${API_URL}/${idHotel}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch {
+    return null;
+  }
+};
+
+
 export const getRoomDetailsByHotelId = async (idHotel: string) => {
   try {
     const token = getAccessToken();
